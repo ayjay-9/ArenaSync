@@ -1,0 +1,91 @@
+.login-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px);
+    padding: 2rem;
+    background: var(--bg);
+}
+
+.login-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 0 40px rgba(0, 195, 255, 0.1);
+}
+
+.login-card h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    font-size: 2rem;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--text);
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(0, 195, 255, 0.25);
+}
+
+.input-group label {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    pointer-events: none;
+    color: var(--text-muted);
+    transition: 0.3s;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -12px;
+    left: 8px;
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--bg-surface);
+    padding: 0 5px;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-family: inherit;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    transition: background 0.3s;
+}
+
+.btn:hover { background: var(--accent2); color: #fff; }
+
+.status {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}

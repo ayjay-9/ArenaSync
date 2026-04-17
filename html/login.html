@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArenaSync | Login</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+  <header id="masthead">
+    <a href="../index.html">
+      <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
+    </a>
+    <p>ArenaSync</p>
+    <nav class="navbar">
+      <div class="hamburger" id="hamburger">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html"><span>HOME</span></a></li>
+        <li><a href="./events.html"><span>EVENTS</span></a></li>
+        <li><a href="./support.html"><span>SUPPORT</span></a></li>
+        <li><a href="./login.html" class="nav-login-btn"><span>LOGIN</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="login-main">
+    <div class="login-card">
+      <h1>Login</h1>
+      <form id="loginForm" action="../php/login.php" method="POST">
+        <div class="input-group">
+          <input type="email" id="email" name="email" placeholder=" " required>
+          <label for="email">Email Address</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="password" name="password" placeholder=" " required>
+          <label for="password">Password</label>
+        </div>
+        <button type="submit" class="btn">Login</button>
+        <p class="status" id="statusMsg"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer id="footer">
+    <p>&copy; 2025 ArenaSync</p>
+    <p>Emmanuel &bull; Ahmad &bull; Miguel</p>
+  </footer>
+
+  <script src="../js/login.js"></script>
+</body>
+
+</html>

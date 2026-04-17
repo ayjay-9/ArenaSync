@@ -1,0 +1,292 @@
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Bebas Neue', 'Poppins', sans-serif;
+    font-weight: bolder;
+    background: var(--bg);
+    color: var(--text);
+}
+
+#container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main { width: 100%; }
+
+/* ── Hero ─────────────────────────────────────── */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-image: url('../images/landing_page.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(8, 8, 19, 0.3) 0%,
+        rgba(8, 8, 19, 0.65) 100%
+    );
+}
+
+#intro {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #fff;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+#intro h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    margin: 0;
+    letter-spacing: 0.05em;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.welcome-tagline {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-style: italic;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.welcome-heading {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: slideIn 1s ease-out forwards;
+    animation-delay: 0.4s;
+}
+
+.welcome-tagline {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: slideIn 0.8s ease-out forwards;
+    animation-delay: 0.9s;
+}
+
+.hero-cta {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: slideIn 0.8s ease-out forwards;
+    animation-delay: 1.3s;
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.75rem 2.5rem;
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: background 0.25s, color 0.25s;
+}
+
+.hero-cta:hover {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+@keyframes slideIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── About banner ─────────────────────────────── */
+#about-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-card) 100%);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    height: 28vh;
+    text-align: center;
+}
+
+#about-content h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin: 0;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(0, 195, 255, 0.4);
+}
+
+/* ── About description ────────────────────────── */
+#about-description {
+    background-color: var(--bg-card);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    padding: 4rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+#about-description > div {
+    width: 60%;
+    max-width: 900px;
+}
+
+#about-description p {
+    margin-bottom: 1.2rem;
+    font-weight: normal;
+    color: var(--text-muted);
+}
+
+/* ── Mission & Vision ─────────────────────────── */
+#about-mission-vision {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    background: linear-gradient(160deg, var(--bg) 0%, #1a0a35 50%, #0a1535 100%);
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    text-align: center;
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    gap: 4rem;
+    opacity: 0;
+    transform: translateY(80px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+#about-mission-vision.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#about-mission,
+#about-vision {
+    opacity: 0;
+    transform: translateY(60px);
+    max-width: 700px;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+#about-mission.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.3s;
+}
+
+#about-vision.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.7s;
+}
+
+#about-mission h2,
+#about-vision h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 1rem;
+    color: var(--accent);
+}
+
+#about-mission p,
+#about-vision p {
+    font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+    line-height: 1.6;
+    font-style: italic;
+    font-weight: normal;
+    color: var(--text-muted);
+}
+
+/* ── Locations ────────────────────────────────── */
+#locations {
+    opacity: 0;
+    transform: translateY(80px);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    padding: 4rem 2rem;
+    gap: 2rem;
+    background: var(--bg-card);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+#locations.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#globe-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text);
+}
+
+#globe-section h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 1rem;
+    color: var(--accent);
+}
+
+#globe-container {
+    width: 300px;
+    height: 300px;
+}
+
+#headquarters,
+#branch-offices {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    color: var(--text);
+}
+
+#headquarters h2,
+#branch-offices h2 {
+    text-align: center;
+    margin-top: 0;
+    color: var(--accent);
+}
+
+#branch-offices ul {
+    padding-left: 1.2rem;
+    font-weight: normal;
+    line-height: 1.8;
+    color: var(--text-muted);
+}
+
+#headquarters p {
+    font-weight: normal;
+    color: var(--text-muted);
+}
+
+/* ── Responsive ───────────────────────────────── */
+@media (max-width: 984px) {
+    #about-description > div { width: 88%; }
+    #about-description { font-size: 0.9rem; }
+    #about-mission p, #about-vision p { font-size: 0.85rem; }
+    #locations { flex-direction: column; align-items: center; }
+}
+
+@media (max-width: 600px) {
+    #intro h1 { font-size: 2rem; }
+    .welcome-tagline { font-size: 0.95rem; }
+}
