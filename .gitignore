@@ -48,6 +48,31 @@ bld/
 # Visual Studio 2017 auto generated files
 Generated\ Files/
 
+# MySQL-specific ignores
+# Database dump files
+*.sql
+dumps/
+database_dumps/
+
+# MySQL logs (if stored locally)
+mysql.log
+mysql_error.log
+mysql_slow.log
+
+# Database configuration files (containing credentials)
+config/database.php
+config/db.php
+db_config.php
+database_config.php
+
+# phpMyAdmin configuration (if used)
+config.inc.php
+
+# Local MySQL data directories (if running local MySQL in project)
+mysql/
+data/
+mysql_data/
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
