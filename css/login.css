@@ -1,5 +1,8 @@
 body {
     min-height: 100vh;
+    font-family: 'Bebas Neue', 'Poppins', sans-serif;
+    font-weight: bolder;
+    margin: 0;
     display: flex;
     flex-direction: column;
     background: linear-gradient(160deg, var(--bg) 0%, #1a0a35 50%, #0a1535 100%);
