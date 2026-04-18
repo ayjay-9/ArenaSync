@@ -130,7 +130,7 @@ html {
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    padding: 1.2rem !important;
+    padding: 2rem 1.2rem !important;
     background: var(--bg) !important;
     color: var(--text-muted) !important;
     font-size: 0.8rem !important;
@@ -140,11 +140,59 @@ html {
     box-sizing: border-box !important;
     grid-template-columns: unset !important;
     border-top: 1px solid var(--border) !important;
+    gap: 0.75rem !important;
 }
 
 #footer p {
-    margin: 0.2rem 0 !important;
+    margin: 0 !important;
     color: var(--text-muted) !important;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    filter: brightness(0) invert(0.55);
+    transition: filter 0.25s ease, transform 0.25s ease;
+    display: block;
+}
+
+.footer-socials a:hover .footer-icon {
+    filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(168deg);
+    transform: scale(1.25);
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: var(--accent);
+}
+
+.footer-credits {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    margin: 0 !important;
 }
 
 /* ── Responsive ───────────────────────────────── */

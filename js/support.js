@@ -78,14 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const c = +counter.innerText
 
       // Calculate how much to increment by (adjust divisor to control speed)
-      const increment = target / 175;
+      const increment = target / 200;
 
       // If the current value is less than the target, update it
       if (c < target) {
         // Increase the counter and round it up
         counter.innerText = `${Math.ceil(c + increment)}`
-        // Call updateCounter again after 1 millisecond
-        setTimeout(updateCounter, 1)
+        // Call updateCounter again after 10 milliseconds
+        setTimeout(updateCounter, 10)
       } else {
         // Once the counter reaches the target, set it exactly to the target value
         counter.innerText = target

@@ -2,6 +2,8 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     background: linear-gradient(135deg, #080813 0%, #1a0a35 50%, #0a1535 100%);
     width: 100%;
     font-family: 'Bebas Neue', 'Poppins', sans-serif;
@@ -25,20 +27,31 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+#counter-container > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
 }
 
 .socials {
-    max-width: 75%;
+    width: 80px;
+    height: 80px;
     fill: var(--accent);
+    transition: fill 0.25s ease, transform 0.25s ease;
 }
 
 .socials:hover {
     fill: var(--accent2);
-    scale: 1.2;
+    transform: scale(1.2);
 }
 
 .counter {
     color: var(--accent);
+    font-size: 1.4rem;
     text-shadow: 0 0 8px rgba(0, 195, 255, 0.4);
 }
 
@@ -171,7 +184,7 @@ select option {
 
 #footer {
     position: static !important;
-    margin-top: 2rem;
+    margin-top: auto;
 }
 
 @keyframes floatUp {

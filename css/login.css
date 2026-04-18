@@ -1,10 +1,16 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(160deg, var(--bg) 0%, #1a0a35 50%, #0a1535 100%);
+}
+
 .login-main {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 60px);
     padding: 2rem;
-    background: var(--bg);
 }
 
 .login-card {

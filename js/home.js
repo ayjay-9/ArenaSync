@@ -34,17 +34,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ── Scroll animations ──────────────────────────────────────────
-    const missionVision = document.getElementById('about-mission-vision');
-    const mission       = document.getElementById('about-mission');
-    const vision        = document.getElementById('about-vision');
-    const locations     = document.getElementById('locations');
-    const description   = document.getElementById('about-description');
+    const missionVision  = document.getElementById('about-mission-vision');
+    const mission        = document.getElementById('about-mission');
+    const vision         = document.getElementById('about-vision');
+    const locations      = document.getElementById('locations');
+    const description    = document.getElementById('about-description');
+    const socialsSection = document.getElementById('socials-section');
+    let countersStarted  = false;
+
+    function startCounters() {
+        document.querySelectorAll('.home-counter').forEach(counter => {
+            counter.innerText = '0';
+            const target = +counter.getAttribute('data-target');
+            const tick = () => {
+                const c = +counter.innerText;
+                const increment = target / 200;
+                if (c < target) {
+                    counter.innerText = `${Math.ceil(c + increment)}`;
+                    setTimeout(tick, 10);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            tick();
+        });
+    }
 
     function checkScroll() {
         if (!description || !locations) return;
 
-        const descRect = description.getBoundingClientRect();
-        const locRect  = locations.getBoundingClientRect();
+        const descRect    = description.getBoundingClientRect();
+        const locRect     = locations.getBoundingClientRect();
 
         if (descRect.bottom < window.innerHeight * 0.75) {
             missionVision?.classList.add('visible');
@@ -60,6 +80,20 @@ document.addEventListener('DOMContentLoaded', () => {
             locations.classList.add('visible');
         } else {
             locations.classList.remove('visible');
+        }
+
+        if (socialsSection) {
+            const socialsRect = socialsSection.getBoundingClientRect();
+            if (socialsRect.top < window.innerHeight * 0.8) {
+                socialsSection.classList.add('visible');
+                if (!countersStarted) {
+                    countersStarted = true;
+                    startCounters();
+                }
+            } else {
+                socialsSection.classList.remove('visible');
+                countersStarted = false;
+            }
         }
     }
 

@@ -278,6 +278,79 @@ main { width: 100%; }
     color: var(--text-muted);
 }
 
+/* ── Socials Section ──────────────────────────── */
+#socials-section {
+    opacity: 0;
+    transform: translateY(80px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    background: linear-gradient(160deg, var(--bg) 0%, #1a0a35 50%, #0a1535 100%);
+    border-top: 1px solid var(--border);
+    gap: 2rem;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+#socials-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#socials-section h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin: 0;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(0, 195, 255, 0.4);
+}
+
+#socials-counter-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+    width: 100%;
+    max-width: 900px;
+}
+
+.social-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: default;
+}
+
+.social-icon {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.social-item:hover .social-icon {
+    filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(168deg);
+    transform: scale(1.2);
+}
+
+.home-counter {
+    color: var(--accent);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    text-shadow: 0 0 8px rgba(0, 195, 255, 0.4);
+}
+
+.social-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+    text-align: center;
+    font-weight: normal;
+}
+
 /* ── Responsive ───────────────────────────────── */
 @media (max-width: 984px) {
     #about-description > div { width: 88%; }
