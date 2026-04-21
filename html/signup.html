@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArenaSync | Login</title>
+  <title>ArenaSync | Signup</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/login.css">
 </head>
@@ -32,18 +32,16 @@
 
   <main class="login-main">
     <div class="login-card">
-      <h1>Login</h1>
+      <h1>Sign Up</h1>
 
       <div class="login-role">
-        <a href="./login.html">Attendee</a>
+        <a href="./signup.html">Attendee</a>
         <span class="role-separator">|</span>
-        <a href="./organizer-login.html">Organizer</a>
-        <span class="role-separator">|</span>
-        <a href="./admin-login.html">Admin</a>
+        <a href="./organizer-signup.html">Organizer</a>
       </div>
 
       <form id="loginForm">
-        <!-- Hidden input to store the user role for login -->
+        <!-- Hidden input to store the user role for signup -->
         <input type ="hidden" id="userRole" name="userRole" value="attendee">
 
         <!-- Email field -->
@@ -62,9 +60,9 @@
           </span>
         </div>
 
-        <button type="submit" class="btn">Login</button>
+        <button type="submit" class="btn">Sign Up</button>
       </form>
-      <a href="./signup.html" class="signup-link">New Attendee? Sign Up Here</a>
+      <a href="./login.html" class="signup-link">Already have an account? Login Here</a>
     </div>
   </main>
 

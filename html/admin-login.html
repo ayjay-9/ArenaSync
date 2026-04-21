@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArenaSync | Login</title>
+  <title>ArenaSync | Admin Login</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/login.css">
 </head>
@@ -32,7 +32,7 @@
 
   <main class="login-main">
     <div class="login-card">
-      <h1>Login</h1>
+      <h1>Admin Login</h1>
 
       <div class="login-role">
         <a href="./login.html">Attendee</a>
@@ -43,8 +43,8 @@
       </div>
 
       <form id="loginForm">
-        <!-- Hidden input to store the user role for login -->
-        <input type ="hidden" id="userRole" name="userRole" value="attendee">
+        <!-- Hidden input to store the admin role for login -->
+        <input type ="hidden" id="userRole" name="userRole" value="admin">
 
         <!-- Email field -->
         <div class="input-group">
@@ -62,9 +62,8 @@
           </span>
         </div>
 
-        <button type="submit" class="btn">Login</button>
+        <button type="submit" class="btn">Welcome, Admin!</button>
       </form>
-      <a href="./signup.html" class="signup-link">New Attendee? Sign Up Here</a>
     </div>
   </main>
 

@@ -1,13 +1,11 @@
-const params = new URLSearchParams(window.location.search);
-const statusMsg = document.getElementById('statusMsg');
+// Toggle password visibility
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('password');
 
-if (statusMsg) {
-  const error = params.get('error');
-  if (error === 'invalid_credentials') {
-    statusMsg.textContent = 'Invalid email or password.';
-    statusMsg.style.color = '#e94560';
-  } else if (error === 'missing_fields') {
-    statusMsg.textContent = 'Please fill in all fields.';
-    statusMsg.style.color = '#e94560';
-  }
+if (togglePassword && passwordInput) {
+  togglePassword.addEventListener('click', function() {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    togglePassword.textContent = isPassword ? 'Hide Password' : 'Show Password';
+  });
 }

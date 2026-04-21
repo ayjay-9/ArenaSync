@@ -33,6 +33,43 @@ body {
     font-size: 2rem;
 }
 
+.login-card .login-role {
+    display: flex;
+    justify-content: space-around;
+    font-size: larger;
+    margin-bottom: 1.5rem;
+}
+
+.login-card .login-role a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: larger;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.login-card .login-role a:hover {
+    background: var(--accent2);
+    color: #fff;
+}
+
+.login-card .login-role .role-separator {
+    color: var(--text-muted);
+    font-size: larger;
+    padding: 8px 0;
+}
+
+.login-card .signup-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
 .input-group {
     position: relative;
     margin-bottom: 30px;
@@ -73,6 +110,16 @@ body {
     color: var(--accent);
     background: var(--bg-surface);
     padding: 0 5px;
+}
+
+.login-card .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 14px;
 }
 
 .btn {
