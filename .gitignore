@@ -441,3 +441,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Mermaid diagram files
+*.mmd
+*.mermaid
