@@ -12,7 +12,7 @@
 
 <body>
   <header id="masthead">
-    <a href="../index.html">
+    <a href="../index.php">
       <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
     </a>
     <p>ArenaSync</p>
@@ -23,10 +23,10 @@
         <div class="bar"></div>
       </div>
       <ul class="nav-links" id="nav-links">
-        <li><a href="../index.html"><span>HOME</span></a></li>
-        <li><a href="./events.html"><span>EVENTS</span></a></li>
-        <li><a href="./support.html"><span>SUPPORT</span></a></li>
-        <li><a href="./login.html" class="nav-login-btn"><span>LOGIN</span></a></li>
+        <li><a href="../index.php"><span>HOME</span></a></li>
+        <li><a href="./events.php"><span>EVENTS</span></a></li>
+        <li><a href="./support.php"><span>SUPPORT</span></a></li>
+        <li><a href="./login.php" class="nav-login-btn"><span>LOGIN</span></a></li>
       </ul>
     </nav>
   </header>
@@ -142,7 +142,7 @@
       <a href="#" aria-label="YouTube"><img src="../icons/youtube.png" class="footer-icon" alt="YouTube"></a>
     </div>
     <div class="footer-links">
-      <a href="./support.html" class="footer-link">Support</a>
+      <a href="./support.php" class="footer-link">Support</a>
       <a href="#" class="footer-link">Terms of Service</a>
     </div>
     <p>&copy; 2026 ArenaSync</p>

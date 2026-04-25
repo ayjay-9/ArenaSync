@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArenaSync | Organizer Login</title>
+  <title>ArenaSync | Organizer Signup</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/login.css">
 </head>
 
 <body>
   <header id="masthead">
-    <a href="../index.html">
+    <a href="../index.php">
       <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
     </a>
     <p>ArenaSync</p>
@@ -22,29 +22,33 @@
         <div class="bar"></div>
       </div>
       <ul class="nav-links" id="nav-links">
-        <li><a href="../index.html"><span>HOME</span></a></li>
-        <!-- <li><a href="./events.html"><span>EVENTS</span></a></li>
-        <li><a href="./support.html"><span>SUPPORT</span></a></li> -->
-        <li><a href="./login.html" class="nav-login-btn"><span>LOGIN</span></a></li>
+        <li><a href="../index.php"><span>HOME</span></a></li>
+        <!-- <li><a href="./events.php"><span>EVENTS</span></a></li>
+        <li><a href="./support.php"><span>SUPPORT</span></a></li> -->
+        <li><a href="./login.php" class="nav-login-btn"><span>LOGIN</span></a></li>
       </ul>
     </nav>
   </header>
 
   <main class="login-main">
     <div class="login-card">
-      <h1>Organizer Login</h1>
+      <h1>Organizer Sign Up</h1>
 
       <div class="login-role">
-        <a href="./login.html">Attendee</a>
+        <a href="./signup.php">Attendee</a>
         <span class="role-separator">|</span>
-        <a href="./organizer-login.html">Organizer</a>
-        <span class="role-separator">|</span>
-        <a href="./admin-login.html">Admin</a>
+        <a href="./organizer-signup.php">Organizer</a>
       </div>
 
       <form id="loginForm">
-        <!-- Hidden input to store the organizer role for login -->
+        <!-- Hidden input to store the organizer role for signup -->
         <input type ="hidden" id="userRole" name="userRole" value="organizer">
+
+        <!--Company Name -->
+        <div class="input-group">
+          <input type="text" id="company" name="company" placeholder=" " required>
+          <label for="company">Company</label>
+        </div>
 
         <!-- Email field -->
         <div class="input-group">
@@ -67,9 +71,9 @@
           <label for="rememberMe">Remember Me</label>
         </div>
 
-        <button type="submit" class="btn">Login</button>
+        <button type="submit" class="btn">Sign Up</button>
       </form>
-      <a href="./organizer-signup.html" class="signup-link">New Organizer? Sign Up Here</a>
+      <a href="./organizer-login.php" class="signup-link">Already have an account? Login Here</a>
     </div>
   </main>
 
@@ -81,7 +85,7 @@
       <a href="#" aria-label="YouTube"><img src="../icons/youtube.png" class="footer-icon" alt="YouTube"></a>
     </div>
     <div class="footer-links">
-      <a href="./support.html" class="footer-link">Support</a>
+      <a href="./support.php" class="footer-link">Support</a>
       <a href="#" class="footer-link">Terms of Service</a>
     </div>
     <p>&copy; 2026 ArenaSync</p>

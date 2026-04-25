@@ -75,7 +75,7 @@
   ?>
 
   <header id="masthead">
-    <a href="../index.html">
+    <a href="../index.php">
       <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
     </a>
     <p>ArenaSync</p>
@@ -148,7 +148,7 @@
       <a href="#" aria-label="YouTube"><img src="../icons/youtube.png" class="footer-icon" alt="YouTube"></a>
     </div>
     <div class="footer-links">
-      <a href="./support.html" class="footer-link">Support</a>
+      <a href="./support.php" class="footer-link">Support</a>
       <a href="#" class="footer-link">Terms of Service</a>
     </div>
     <p>&copy; 2026 ArenaSync</p>

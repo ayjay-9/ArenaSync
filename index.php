@@ -18,7 +18,7 @@
 <body>
     <div id="container">
         <header id="masthead">
-            <a href="./index.html">
+            <a href="./index.php">
                 <img src="images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
             </a>
             <p>ArenaSync</p>
@@ -32,13 +32,13 @@
                     <li><a href="./index.php"><span>Home</span></a></li>
                     <!-- Show events, organizers, and my arena links only if an attendee is logged in -->
                     <?php if(isset($_SESSION['attendee_id'])): ?>
-                        <li><a href="./html/events.php"><span>Events</span></a></li>
-                        <li><a href="./html/organizers.php"><span>Organizers</span></a></li>
-                        <li id="my-arena-link"><a href="./html/my_arena.php"><span><i>MyArena</i></span></a></li>
+                        <li><a href="./php/events.php"><span>Events</span></a></li>
+                        <li><a href="./php/organizers.php"><span>Organizers</span></a></li>
+                        <li id="my-arena-link"><a href="./php/my_arena.php"><span><i>MyArena</i></span></a></li>
                     <?php endif; ?>
                     <!-- Show login link only if no user is logged in -->
                     <?php if(!isset($_SESSION['attendee_id']) && !isset($_SESSION['organizer_id']) && !isset($_SESSION['admin_id'])): ?>
-                        <li><a href="./html/login.php" class="nav-login-btn"><span>LOGIN</span></a></li>
+                        <li><a href="./php/login.php" class="nav-login-btn"><span>LOGIN</span></a></li>
                     <?php endif; ?>
                 </ul>
             </nav>
@@ -52,11 +52,11 @@
                     <p class="welcome-tagline">"Your arena. Your events. In sync."</p>
                     <!-- Show login/signup button only if no user is logged in -->
                     <?php if(!isset($_SESSION['attendee_id']) && !isset($_SESSION['organizer_id']) && !isset($_SESSION['admin_id'])): ?>
-                        <a href="./html/login.php" class="hero-cta">Login / SignUp</a>
+                        <a href="./php/login.php" class="hero-cta">Login / SignUp</a>
                     <?php endif; ?>
                     <!-- Show events link if an attendee is logged in -->
                     <?php if(isset($_SESSION['attendee_id'])): ?>
-                        <a href="./html/events.php" class="hero-cta">View Events</a>
+                        <a href="./php/events.php" class="hero-cta">View Events</a>
                     <?php endif; ?>
                 </div>
             </section>
@@ -172,7 +172,7 @@
                 <a href="#" aria-label="YouTube"><img src="icons/youtube.png" class="footer-icon" alt="YouTube"></a>
             </div>
             <div class="footer-links">
-                <a href="./html/support.html" class="footer-link">Support</a>
+                <a href="./php/support.php" class="footer-link">Support</a>
                 <a href="#" class="footer-link">Terms of Service</a>
             </div>
             <p>&copy; 2026 ArenaSync</p>

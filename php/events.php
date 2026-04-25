@@ -1,3 +1,8 @@
+<?php
+    // Start the session to manage user state across pages
+    session_start();
+?>
+
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -15,7 +20,7 @@
 <body>
     <div class="container">
         <header id="masthead">
-            <a href="../index.html">
+            <a href="../index.php">
                 <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
             </a>
             <p>ArenaSync</p>
@@ -26,10 +31,13 @@
                     <div class="bar"></div>
                 </div>
                 <ul class="nav-links" id="nav-links">
-                    <li><a href="../index.html"><span>HOME</span></a></li>
-                    <li><a href="./events.html"><span>EVENTS</span></a></li>
-                    <li><a href="./support.html"><span>SUPPORT</span></a></li>
-                    <li><a href="./login.html" class="nav-login-btn"><span>LOGIN</span></a></li>
+                    <li><a href="../index.php"><span>Home</span></a></li>
+                    <!-- Show events, organizers, and my arena links only if an attendee is logged in -->
+                    <?php if(isset($_SESSION['attendee_id'])): ?>
+                        <li><a href="./events.php"><span>Events</span></a></li>
+                        <li><a href="./organizers.php"><span>Organizers</span></a></li>
+                        <li id="my-arena-link"><a href="./my_arena.php"><span><i>MyArena</i></span></a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
         </header>
@@ -463,7 +471,7 @@
                 <a href="#" aria-label="YouTube"><img src="../icons/youtube.png" class="footer-icon" alt="YouTube"></a>
             </div>
             <div class="footer-links">
-                <a href="./support.html" class="footer-link">Support</a>
+                <a href="./support.php" class="footer-link">Support</a>
                 <a href="#" class="footer-link">Terms of Service</a>
             </div>
             <p>&copy; 2026 ArenaSync</p>

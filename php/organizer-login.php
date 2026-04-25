@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArenaSync | Admin Login</title>
+  <title>ArenaSync | Organizer Login</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/login.css">
 </head>
 
 <body>
   <header id="masthead">
-    <a href="../index.html">
+    <a href="../index.php">
       <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
     </a>
     <p>ArenaSync</p>
@@ -22,34 +22,34 @@
         <div class="bar"></div>
       </div>
       <ul class="nav-links" id="nav-links">
-        <li><a href="../index.html"><span>HOME</span></a></li>
-        <!-- <li><a href="./events.html"><span>EVENTS</span></a></li>
-        <li><a href="./support.html"><span>SUPPORT</span></a></li> -->
-        <li><a href="./login.html" class="nav-login-btn"><span>LOGIN</span></a></li>
+        <li><a href="../index.php"><span>HOME</span></a></li>
+        <!-- <li><a href="./events.php"><span>EVENTS</span></a></li>
+        <li><a href="./support.php"><span>SUPPORT</span></a></li> -->
+        <li><a href="./login.php" class="nav-login-btn"><span>LOGIN</span></a></li>
       </ul>
     </nav>
   </header>
 
   <main class="login-main">
     <div class="login-card">
-      <h1>Admin Login</h1>
+      <h1>Organizer Login</h1>
 
       <div class="login-role">
-        <a href="./login.html">Attendee</a>
+        <a href="./login.php">Attendee</a>
         <span class="role-separator">|</span>
-        <a href="./organizer-login.html">Organizer</a>
+        <a href="./organizer-login.php">Organizer</a>
         <span class="role-separator">|</span>
-        <a href="./admin-login.html">Admin</a>
+        <a href="./admin-login.php">Admin</a>
       </div>
 
       <form id="loginForm">
-        <!-- Hidden input to store the admin role for login -->
-        <input type ="hidden" id="userRole" name="userRole" value="admin">
+        <!-- Hidden input to store the organizer role for login -->
+        <input type ="hidden" id="userRole" name="userRole" value="organizer">
 
         <!-- Email field -->
         <div class="input-group">
           <input type="email" id="email" name="email" placeholder=" " required>
-          <label for="email">Email Address</label>
+          <label for="email">Organization Email Address</label>
         </div>
 
         <!-- Password field -->
@@ -67,8 +67,9 @@
           <label for="rememberMe">Remember Me</label>
         </div>
 
-        <button type="submit" class="btn">Welcome, Admin!</button>
+        <button type="submit" class="btn">Login</button>
       </form>
+      <a href="./organizer-signup.php" class="signup-link">New Organizer? Sign Up Here</a>
     </div>
   </main>
 
@@ -80,7 +81,7 @@
       <a href="#" aria-label="YouTube"><img src="../icons/youtube.png" class="footer-icon" alt="YouTube"></a>
     </div>
     <div class="footer-links">
-      <a href="./support.html" class="footer-link">Support</a>
+      <a href="./support.php" class="footer-link">Support</a>
       <a href="#" class="footer-link">Terms of Service</a>
     </div>
     <p>&copy; 2026 ArenaSync</p>
