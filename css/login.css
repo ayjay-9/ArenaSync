@@ -122,6 +122,18 @@ body {
     font-size: 14px;
 }
 
+/* Error Messages */
+#email_error, #password_error, #firstName_error, #lastName_error {
+    color: red;
+    font-weight: lighter;
+}
+
+/* Signup Success Message */
+#signup-success {
+    color: green;
+    font-weight: bold;
+}
+
 /* ── Remember Me ────────────────────────────── */
 .remember-me {
     display: flex;

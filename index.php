@@ -1,3 +1,8 @@
+<?php
+    // Start the session to manage user state across pages
+    session_start();
+?>
+
 <!doctype html>
 <html class="no-js" lang="">
 
@@ -24,10 +29,17 @@
                     <div class="bar"></div>
                 </div>
                 <ul class="nav-links" id="nav-links">
-                    <li><a href="./index.html"><span>HOME</span></a></li>
-                    <!-- <li><a href="./html/events.html"><span>EVENTS</span></a></li>
-                    <li><a href="./html/support.html"><span>SUPPORT</span></a></li> -->
-                    <li><a href="./html/login.html" class="nav-login-btn"><span>LOGIN</span></a></li>
+                    <li><a href="./index.php"><span>Home</span></a></li>
+                    <!-- Show events, organizers, and my arena links only if an attendee is logged in -->
+                    <?php if(isset($_SESSION['attendee_id'])): ?>
+                        <li><a href="./html/events.php"><span>Events</span></a></li>
+                        <li><a href="./html/organizers.php"><span>Organizers</span></a></li>
+                        <li id="my-arena-link"><a href="./html/my_arena.php"><span><i>MyArena</i></span></a></li>
+                    <?php endif; ?>
+                    <!-- Show login link only if no user is logged in -->
+                    <?php if(!isset($_SESSION['attendee_id']) && !isset($_SESSION['organizer_id']) && !isset($_SESSION['admin_id'])): ?>
+                        <li><a href="./html/login.php" class="nav-login-btn"><span>LOGIN</span></a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
         </header>
@@ -38,7 +50,14 @@
                 <div id="intro">
                     <h1 class="welcome-heading">Welcome to ArenaSync</h1>
                     <p class="welcome-tagline">"Your arena. Your events. In sync."</p>
-                    <a href="./html/login.html" class="hero-cta">Login / SignUp</a>
+                    <!-- Show login/signup button only if no user is logged in -->
+                    <?php if(!isset($_SESSION['attendee_id']) && !isset($_SESSION['organizer_id']) && !isset($_SESSION['admin_id'])): ?>
+                        <a href="./html/login.php" class="hero-cta">Login / SignUp</a>
+                    <?php endif; ?>
+                    <!-- Show events link if an attendee is logged in -->
+                    <?php if(isset($_SESSION['attendee_id'])): ?>
+                        <a href="./html/events.php" class="hero-cta">View Events</a>
+                    <?php endif; ?>
                 </div>
             </section>
 

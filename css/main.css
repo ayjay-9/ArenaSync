@@ -82,6 +82,17 @@ html {
     margin-left: 0.5rem;
 }
 
+#my-arena-link a {
+    border: 1px solid var(--accent) !important;
+    color: var(--accent) !important;
+    margin-left: 0.5rem;
+}
+
+#my-arena-link a:hover {
+    background-color: var(--accent) !important;
+    color: var(--bg) !important;
+}
+
 .nav-login-btn:hover {
     background-color: var(--accent) !important;
     color: var(--bg) !important;
