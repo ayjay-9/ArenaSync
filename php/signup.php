@@ -89,10 +89,8 @@
         <div class="bar"></div>
       </div>
       <ul class="nav-links" id="nav-links">
-        <li><a href="../index.php"><span>HOME</span></a></li>
-        <!-- <li><a href="./events.php"><span>EVENTS</span></a></li>
-        <li><a href="./support.php"><span>SUPPORT</span></a></li> -->
-        <li><a href="./login.php" class="nav-login-btn"><span>LOGIN</span></a></li>
+        <li><a href="../index.php"><span>Home</span></a></li>
+        <li><a href="./login.php" class="nav-login-btn"><span>Login</span></a></li>
       </ul>
     </nav>
   </header>

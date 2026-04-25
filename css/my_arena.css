@@ -99,6 +99,144 @@ body {
     background: var(--bg);
 }
 
+/* ── Section title ─────────────────────────────── */
+.section-title {
+    color: var(--accent);
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
+    margin: 0 0 1.75rem;
+}
+
+/* ── Personal details form ─────────────────────── */
+#personalDetailsForm {
+    max-width: 480px;
+}
+
+/* Floating-label input group — mirrors login.css */
+.input-group {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--text);
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(0, 195, 255, 0.25);
+}
+
+.input-group label {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    pointer-events: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: normal;
+    transition: top 0.3s, font-size 0.3s, color 0.3s;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: -12px;
+    left: 8px;
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: var(--bg);
+    padding: 0 5px;
+}
+
+.label-hint {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0;
+}
+
+/* Password toggle — mirrors login.css */
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: normal;
+    user-select: none;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: var(--accent);
+}
+
+/* Field-level error messages */
+.field-error {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: #ff4d6d;
+    min-height: 1em;
+}
+
+/* Form-level success / error banners */
+.form-success {
+    background: rgba(0, 195, 100, 0.12);
+    border: 1px solid rgba(0, 195, 100, 0.35);
+    color: #00c864;
+    border-radius: 6px;
+    padding: 0.65rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+.form-error {
+    background: rgba(255, 77, 109, 0.1);
+    border: 1px solid rgba(255, 77, 109, 0.35);
+    color: #ff4d6d;
+    border-radius: 6px;
+    padding: 0.65rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+/* Submit button — mirrors login.css .btn */
+.btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.3s, color 0.3s;
+}
+
+.btn:hover {
+    background: var(--accent2);
+    color: #fff;
+}
+
 /* ── Responsive ────────────────────────────────── */
 @media (max-width: 768px) {
     #main-content {
