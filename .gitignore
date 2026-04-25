@@ -64,6 +64,7 @@ config/database.php
 config/db.php
 db_config.php
 database_config.php
+config.php
 
 # phpMyAdmin configuration (if used)
 config.inc.php
