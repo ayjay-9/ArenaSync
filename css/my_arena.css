@@ -1,0 +1,155 @@
+/* ── Page shell ────────────────────────────────── */
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Bebas Neue', 'Poppins', sans-serif;
+    font-weight: bolder;
+}
+
+/* ── Page container ────────────────────────────── */
+#container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* ── Two-column layout (3fr sidebar : 7fr content) ─ */
+#main-content {
+    display: grid;
+    grid-template-columns: 3fr 7fr;
+    flex: 1;
+    min-height: 0; /* lets grid children scroll independently */
+}
+
+/* ── Sidebar ───────────────────────────────────── */
+#sidebar {
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem 0;
+    overflow-y: auto;
+}
+
+#sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+#sidebar ul li a {
+    display: block;
+    padding: 0.85rem 2rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: normal;
+    letter-spacing: 0.05em;
+    border-left: 3px solid transparent;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+
+#sidebar ul li a:hover,
+#sidebar ul li a.active {
+    color: var(--accent);
+    background: var(--bg-surface);
+    border-left-color: var(--accent);
+}
+
+/* ── Logout form & button ──────────────────────── */
+#sidebar form {
+    margin: 0 2rem;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    background: transparent;
+    border: 1px solid var(--accent2);
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.logout-btn:hover {
+    background: var(--accent2);
+    color: var(--text);
+    border-color: var(--accent2);
+}
+
+/* ── Main content panel ────────────────────────── */
+#main {
+    padding: 2rem;
+    overflow-y: auto;
+    background: var(--bg);
+}
+
+/* ── Responsive ────────────────────────────────── */
+@media (max-width: 768px) {
+    #main-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    #sidebar {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    #sidebar ul {
+        flex-direction: row;
+        gap: 0;
+        flex-wrap: nowrap;
+    }
+
+    #sidebar ul li a {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        white-space: nowrap;
+    }
+
+    #sidebar ul li a:hover,
+    #sidebar ul li a.active {
+        border-left-color: transparent;
+        border-bottom-color: var(--accent);
+        background: transparent;
+    }
+
+    #sidebar form {
+        margin: 0 0 0 1rem;
+        flex-shrink: 0;
+    }
+
+    .logout-btn {
+        padding: 0.45rem 0.85rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    #main {
+        padding: 1.25rem;
+    }
+}

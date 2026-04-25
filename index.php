@@ -38,7 +38,7 @@
                     <?php endif; ?>
                     <!-- Show login link only if no user is logged in -->
                     <?php if(!isset($_SESSION['attendee_id']) && !isset($_SESSION['organizer_id']) && !isset($_SESSION['admin_id'])): ?>
-                        <li><a href="./php/login.php" class="nav-login-btn"><span>LOGIN</span></a></li>
+                        <li><a href="./php/login.php" class="nav-login-btn"><span>Login</span></a></li>
                     <?php endif; ?>
                 </ul>
             </nav>
