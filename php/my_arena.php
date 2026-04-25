@@ -61,7 +61,7 @@
                 $email_check->store_result();
                 
                 if ($email_check->num_rows > 0) {
-                    $email_error = "This email is already registered to another account.";
+                    $email_error = "That email is already registered to another account.";
                     $email_check->close();
                 } 
                 elseif (!empty($password)) {
@@ -174,7 +174,7 @@
 
                         <!-- Email -->
                         <div class="input-group">
-                            <input type="email" id="email" name="email" placeholder=" " value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
+                            <input type="email" id="email" name="email" placeholder=" " value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required>
                             <label for="email">Email Address</label>
                             <span class="field-error" id="email_error">
                                 <?php echo htmlspecialchars($email_error); ?>
@@ -207,6 +207,21 @@
                 </section>
             </main>
         </div>
+
+        <footer id="footer">
+            <div class="footer-socials">
+                <a href="#" aria-label="Facebook"><img src="../icons/facebook-app-symbol.png" class="footer-icon" alt="Facebook"></a>
+                <a href="#" aria-label="Twitter"><img src="../icons/twitter-black-shape.png" class="footer-icon" alt="Twitter"></a>
+                <a href="#" aria-label="Twitch"><img src="../icons/twitch.png" class="footer-icon" alt="Twitch"></a>
+                <a href="#" aria-label="YouTube"><img src="../icons/youtube.png" class="footer-icon" alt="YouTube"></a>
+            </div>
+            <div class="footer-links">
+                <a href="./support.php" class="footer-link">Support</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+            </div>
+            <p>&copy; 2026 ArenaSync</p>
+            <p class="footer-credits">Emmanuel &nbsp;&nbsp; Ahmad &nbsp;&nbsp; Miguel</p>
+        </footer>
     </div>
 
     <script src="../js/main.js"></script>
