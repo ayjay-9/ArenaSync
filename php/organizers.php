@@ -1,6 +1,31 @@
 <?php
     // Start the session to manage user state across pages
     session_start();
+    // Include the database connection and organizer-related functions
+    require_once '../db_config.php';
+
+    // Check if the user is logged in as an attendee; if not, redirect to the login page
+    if (!isset($_SESSION['attendee_id'])) {
+        header("Location: ./login.php");
+        exit();
+    }
+
+    // Get the organization name from the search query if it exists, otherwise set it to an empty string
+    $organization_name = trim($_GET['org_search'] ?? '');
+
+    // Always fetch organizers: filter by name if a search was submitted, otherwise return all
+    if (!empty($organization_name)) {
+        $search = "%$organization_name%";
+        $stmt = $conn->prepare("SELECT * FROM users WHERE role = 'organiser' AND company LIKE ?");
+        $stmt->bind_param("s", $search);
+    } else {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE role = 'organiser'");
+    }
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $organizers = $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
+    $stmt->close();
 ?>
 
 <!doctype html>
@@ -39,7 +64,49 @@
         </header>
 
         <main>
-            <h1>Organizers Page</h1>
+            <form id="org_search" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="GET" novalidate>
+                <div class="search-wrapper">
+                    <!-- The search input retains the user's query after submission for better UX -->
+                    <input type="text" name="org_search" placeholder="Search organizers..." value="<?php echo isset($_GET['org_search']) ? htmlspecialchars($_GET['org_search']) : ''; ?>">
+                    <button type="submit">Search</button>
+                </div>
+            </form>
+
+            <!-- Display organizer cards if any exist; otherwise show an empty-state message -->
+            <?php if (count($organizers) > 0): ?>
+                <div class="organizers-grid">
+                    <!-- Loop through each organizer and display their company name and events -->
+                    <?php foreach ($organizers as $organizer): ?>
+                        <div class="organizer-card">
+                            <div class="organizer-card-body">
+                                <h5><?php echo htmlspecialchars($organizer['company']); ?></h5>
+                                <ul class="organizer-events">
+                                    <?php
+                                        // Fetch events organised by the current organizer
+                                        $events_sql = "SELECT g.name FROM events e JOIN games g ON e.game_id = g.id WHERE e.organiser_id = ?";
+                                        $events_stmt = $conn->prepare($events_sql);
+                                        $events_stmt->bind_param("i", $organizer['id']);
+                                        $events_stmt->execute();
+                                        $events_result = $events_stmt->get_result();
+
+                                        // If the organizer has events, list them; otherwise indicate there are no events
+                                        if ($events_result->num_rows > 0) {
+                                            while ($event = $events_result->fetch_assoc()) {
+                                                echo "<li>" . htmlspecialchars($event['name']) . "</li>";
+                                            }
+                                        } else {
+                                            echo "<li>No events yet, check back soon!</li>";
+                                        }
+                                        $events_stmt->close();
+                                    ?>
+                                </ul>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p class="organizers-empty">No organizers found.</p>
+            <?php endif; ?>
         </main>
 
     </div>

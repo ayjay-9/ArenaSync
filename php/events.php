@@ -1,6 +1,11 @@
 <?php
     // Start the session to manage user state across pages
     session_start();
+    // Check if the user is logged in as an attendee; if not, redirect to the login page
+    if (!isset($_SESSION['attendee_id'])) {
+        header("Location: ./login.php");
+        exit();
+    }
 ?>
 
 <!doctype html>
