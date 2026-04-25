@@ -14,47 +14,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Client-side validation ───────────────────────────────
-    const form = document.getElementById('personalDetailsForm');
+    // ── Sidebar tab switching ────────────────────────────────
+    const navLinks = document.querySelectorAll('#sidebar ul li a');
+    const sections = document.querySelectorAll('#main section');
 
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            let valid = true;
+    function switchTab(targetId) {
+        // Hide all sections, show the target
+        sections.forEach(section => {
+            section.style.display = section.id === targetId ? 'block' : 'none';
+        });
 
-            const firstName = document.getElementById('firstName');
-            const lastName  = document.getElementById('lastName');
-            const email     = document.getElementById('email');
-
-            const firstNameError = document.getElementById('firstName_error');
-            const lastNameError  = document.getElementById('lastName_error');
-            const emailError     = document.getElementById('email_error');
-
-            // Clear previous errors
-            [firstNameError, lastNameError, emailError].forEach(el => {
-                if (el) el.textContent = '';
-            });
-
-            // First name
-            if (!firstName.value.trim()) {
-                firstNameError.textContent = 'First name is required.';
-                valid = false;
-            }
-
-            // Last name
-            if (!lastName.value.trim()) {
-                lastNameError.textContent = 'Last name is required.';
-                valid = false;
-            }
-
-            // Email
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email.value.trim() || !emailPattern.test(email.value.trim())) {
-                emailError.textContent = 'A valid email address is required.';
-                valid = false;
-            }
-
-            if (!valid) e.preventDefault();
+        // Update active class on nav links
+        navLinks.forEach(link => {
+            const linkTarget = link.getAttribute('href').replace('#', '');
+            link.classList.toggle('active', linkTarget === targetId);
         });
     }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').replace('#', '');
+            switchTab(targetId);
+        });
+    });
+
+    // Activate the tab matching the URL hash on load, or default to the first
+    const initialHash = window.location.hash.replace('#', '');
+    const validIds    = Array.from(sections).map(s => s.id);
+    switchTab(validIds.includes(initialHash) ? initialHash : validIds[0]);
 
 });

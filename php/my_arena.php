@@ -141,7 +141,7 @@
 
             <main id="main">
                 <!-- Personal Details section -->
-                <div id="personal-details">
+                <section id="personal-details">
                     <h2 class="section-title">Personal Details</h2>
 
                     <?php if (!empty($success_message)): ?>
@@ -192,7 +192,19 @@
 
                         <button type="submit" class="btn">Update</button>
                     </form>
-                </div>
+                </section>
+
+                <!-- My Events section -->
+                <section id="my-events">
+                    <h2 class="section-title">My Events</h2>
+                    <p>Here you can see the events you've registered for. (Feature coming soon!)</p>
+                </section>
+
+                <!-- Favourites section -->
+                <section id="favourites">
+                    <h2 class="section-title">Favourites</h2>
+                    <p>Here you can see your favourite events and organizers. (Feature coming soon!)</p>
+                </section>
             </main>
         </div>
     </div>
