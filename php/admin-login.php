@@ -10,16 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $userPassword = $_POST['password'] ?? '';
 
     try {
-        $pdo = new PDO(
-            "mysql:host=$host;dbname=$dbname;charset=utf8",
-            $db_user,
-            $db_pass
-        );
 
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // Get admin only
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND role = 'admin'");
+        // use the connection from db_config.php
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND role = 'admin'");
         $stmt->execute([$email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
