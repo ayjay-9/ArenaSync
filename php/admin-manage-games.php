@@ -1,18 +1,34 @@
 <?php
 session_start();
 
+/**
+ * PROTECT PAGE (admin must be logged in)
+ */
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: ./login.php");
+    header("Location: ./admin-login.php");
     exit();
 }
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . "/ArenaSync/db_config.php";
 require_once __DIR__ . "/services/admin-games-services.php";
 
 /**
- * HANDLE ACTIONS
+ * LOGOUT HANDLER (UNIFIED SYSTEM)
  */
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_POST['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: ../index.php");
+    exit();
+}
+
+/**
+ * HANDLE ACTIONS (IGNORE LOGOUT POSTS)
+ */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
 
     $action = $_POST['action'] ?? '';
 
@@ -75,7 +91,15 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <ul class="nav-links">
             <li><a href="./admin-index.php">Home</a></li>
             <li><a href="./admin-dashboard.php">Dashboard</a></li>
-            <li><a href="./logout.php">Logout</a></li>
+
+            <!-- FIXED LOGOUT (same as working users page) -->
+            <li>
+                <form method="POST" style="display:inline;">
+                    <button type="submit" name="logout" style="background:none;border:none;color:inherit;cursor:pointer;">
+                        Logout
+                    </button>
+                </form>
+            </li>
         </ul>
     </nav>
 </header>
@@ -95,7 +119,6 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <h2>Manage Games</h2>
 
-<!-- ACTION BUTTONS -->
 <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
 
     <button onclick="document.getElementById('addModal').style.display='block'">
@@ -112,7 +135,6 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </div>
 
-<!-- TABLE -->
 <table border="1" width="100%">
 <thead>
 <tr>
@@ -204,9 +226,6 @@ function updateButtons() {
 
 checkboxes.forEach(cb => cb.addEventListener('change', updateButtons));
 
-/**
- * DELETE
- */
 function submitDelete() {
 
     const rows = [...document.querySelectorAll('.row:checked')];
@@ -227,13 +246,9 @@ function submitDelete() {
     form.submit();
 }
 
-/**
- * EDIT BATCH
- */
 function openBatchEdit() {
 
     const selected = [...document.querySelectorAll('.row:checked')];
-
     const container = document.getElementById('batchEditContainer');
     container.innerHTML = '';
 

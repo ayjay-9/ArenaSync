@@ -1,12 +1,25 @@
 <?php
 session_start();
 
+/**
+ * PROTECT PAGE
+ */
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: ./login.php");
+    header("Location: /ArenaSync/php/admin-login.php");
     exit();
 }
 
-require_once __DIR__ . "/../db_config.php";
+/**
+ * LOGOUT HANDLER (UNIFIED SYSTEM)
+ */
+if (isset($_POST['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: ../index.php");
+    exit();
+}
+
+require_once $_SERVER['DOCUMENT_ROOT'] . "/ArenaSync/db_config.php";
 
 /* TOTAL USERS */
 $stmt = $conn->prepare("SELECT COUNT(*) FROM users");
@@ -79,7 +92,15 @@ $totalBookings = $stmt->fetchColumn();
             <ul class="nav-links" id="nav-links">
                 <li><a href="./admin-index.php"><span>Home</span></a></li>
                 <li><a href="./admin-dashboard.php"><span>Dashboard</span></a></li>
-                <li><a href="./logout.php" class="nav-login-btn"><span>Logout</span></a></li>
+
+                <!-- FIXED LOGOUT (same system as all other pages) -->
+                <li>
+                    <form method="POST" style="display:inline;">
+                        <button type="submit" name="logout" style="background:none;border:none;color:inherit;cursor:pointer;">
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </li>
             </ul>
         </nav>
     </header>

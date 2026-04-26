@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['admin_id'])) {
-    header("Location: ./login.php");
+    header("Location: ./admin-login.php");
     exit();
 }
 
@@ -13,9 +13,19 @@ require_once __DIR__ . "/../db_config.php";
 require_once __DIR__ . "/services/admin-events-services.php";
 
 /**
+ * LOGOUT HANDLER (UNIFIED)
+ */
+if (isset($_POST['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: ../index.php");
+    exit();
+}
+
+/**
  * HANDLE ACTIONS
  */
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
 
     $action = $_POST['action'] ?? '';
 
@@ -64,7 +74,7 @@ $stmt->execute();
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 /**
- * LOAD DROPDOWNS
+ * DROPDOWNS
  */
 $games = $conn->query("SELECT id, name FROM games")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -102,7 +112,16 @@ $organisers = $conn->query("
         <ul class="nav-links">
             <li><a href="./admin-index.php">Home</a></li>
             <li><a href="./admin-dashboard.php">Dashboard</a></li>
-            <li><a href="./logout.php">Logout</a></li>
+
+            <!-- FIXED LOGOUT -->
+            <li>
+                <form method="POST" style="display:inline;">
+                    <button type="submit" name="logout"
+                        style="background:none;border:none;color:inherit;cursor:pointer;">
+                        Logout
+                    </button>
+                </form>
+            </li>
         </ul>
     </nav>
 </header>
@@ -123,7 +142,6 @@ $organisers = $conn->query("
 <h2>Manage Events</h2>
 
 <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
-
     <button onclick="document.getElementById('addModal').style.display='block'">
         Add Event
     </button>
@@ -135,7 +153,6 @@ $organisers = $conn->query("
     <button id="deleteBtn" disabled onclick="submitDelete()">
         Delete Event(s)
     </button>
-
 </div>
 
 <table border="1" width="100%">
@@ -225,7 +242,7 @@ if ($organizer === '') $organizer = 'N/A';
     <input name="date_time" type="datetime-local" required>
 
     <button type="submit">Create</button>
-    <button type="button" onclick="document.getElementById('addModal').style.display='none'">
+    <button type="button" onclick="this.closest('#addModal').style.display='none'">
         Cancel
     </button>
 
