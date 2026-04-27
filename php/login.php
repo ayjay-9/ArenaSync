@@ -57,7 +57,17 @@
             session_start();
             $_SESSION['attendee_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
-            // Redirect to the dashboard or home page after successful login
+
+            // If "Remember Me" is checked, store a 30-day cookie tied to a DB token
+            if (isset($_POST['rememberMe'])) {
+              $token = bin2hex(random_bytes(32));
+              $upd = $conn->prepare("UPDATE users SET remember_token = ? WHERE id = ?");
+              $upd->bind_param("si", $token, $user['id']);
+              $upd->execute();
+              $upd->close();
+              setcookie('remember_me', $token, time() + 60 * 60 * 24 * 30, "/", "", false, true);
+            }
+
             header("Location: ../index.php");
             exit();
           } else {
