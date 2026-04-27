@@ -17,6 +17,16 @@
       $user = $result->fetch_assoc();
       if (password_verify($password, $user['password'])) {
         $_SESSION['organizer_id'] = $user['id'];
+
+        if (isset($_POST['rememberMe'])) {
+          $token = bin2hex(random_bytes(32));
+          $upd = $conn->prepare("UPDATE users SET remember_token = ? WHERE id = ?");
+          $upd->bind_param("si", $token, $user['id']);
+          $upd->execute();
+          $upd->close();
+          setcookie('remember_me', $token, time() + 60 * 60 * 24 * 30, "/", "", false, true);
+        }
+
         header("Location: organizer-dashboard.php");
         exit();
       }
