@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-/**
- * PROTECT PAGE (admin must be logged in)
- */
 if (!isset($_SESSION['admin_id'])) {
     header("Location: ./admin-login.php");
     exit();
@@ -16,7 +13,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/ArenaSync/db_config.php";
 require_once __DIR__ . "/services/admin-games-services.php";
 
 /**
- * LOGOUT HANDLER (UNIFIED SYSTEM)
+ * LOGOUT
  */
 if (isset($_POST['logout'])) {
     session_unset();
@@ -26,14 +23,13 @@ if (isset($_POST['logout'])) {
 }
 
 /**
- * HANDLE ACTIONS (IGNORE LOGOUT POSTS)
+ * ACTIONS
  */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
 
     $action = $_POST['action'] ?? '';
 
     switch ($action) {
-
         case 'create':
             createGame($conn, $_POST);
             break;
@@ -59,7 +55,6 @@ $stmt = $conn->prepare("
     FROM games
     ORDER BY id DESC
 ");
-
 $stmt->execute();
 $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -74,6 +69,7 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/home.css">
+<link rel="stylesheet" href="../css/admin.css">
 </head>
 
 <body>
@@ -82,63 +78,77 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <header id="masthead">
     <a href="./admin-index.php">
-        <img src="../images/home-page-icon.png" class="home-page-icon">
+        <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
     </a>
 
     <p>ArenaSync (Admin)</p>
 
-    <nav>
-        <ul class="nav-links">
-            <li><a href="./admin-index.php">Home</a></li>
-            <li><a href="./admin-dashboard.php">Dashboard</a></li>
+    <nav class="navbar">
 
-            <!-- FIXED LOGOUT (same as working users page) -->
+        <div class="hamburger" id="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <ul class="nav-links" id="nav-links">
+
+            <li>
+                <a href="./admin-index.php">
+                    <span>Home</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="./admin-dashboard.php">
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
             <li>
                 <form method="POST" style="display:inline;">
-                    <button type="submit" name="logout" style="background:none;border:none;color:inherit;cursor:pointer;">
-                        Logout
+                    <button type="submit" name="logout" class="nav-login-btn">
+                        <span>Logout</span>
                     </button>
                 </form>
             </li>
+
         </ul>
+
     </nav>
 </header>
 
 <div id="main-content">
 
 <aside id="sidebar">
-    <ul>
+
+    <div class="sidebar-header">
+        <h3>Admin Panel</h3>
+    </div>
+
+    <ul class="sidebar-menu">
         <li><a href="./admin-dashboard.php">Manage Users</a></li>
         <li><a href="./admin-manage-events.php">Manage Events</a></li>
-        <li><a class="active">Manage Games</a></li>
+        <li><a class="active" href="./admin-manage-games.php">Manage Games</a></li>
         <li><a href="./admin-statistics.php">View Statistics</a></li>
     </ul>
+
 </aside>
 
 <main id="main">
 
-<h2>Manage Games</h2>
+<h2 class="section-title">Manage Games</h2>
 
-<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
-
-    <button onclick="document.getElementById('addModal').style.display='block'">
-        Add Game
-    </button>
-
-    <button id="editBtn" disabled onclick="openBatchEdit()">
-        Edit Game(s)
-    </button>
-
-    <button id="deleteBtn" disabled onclick="submitDelete()">
-        Delete Game(s)
-    </button>
-
+<div class="admin-actions">
+    <button class="btn" onclick="openAddModal()">Add Game</button>
+    <button class="btn secondary" id="editBtn" disabled onclick="openBatchEdit()">Edit</button>
+    <button class="btn danger" id="deleteBtn" disabled onclick="submitDelete()">Delete</button>
 </div>
 
-<table border="1" width="100%">
+<table class="admin-table">
 <thead>
 <tr>
-    <th>S/N</th>
+    <th>#</th>
     <th>Name</th>
     <th>Category</th>
     <th>Description</th>
@@ -176,40 +186,47 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </main>
 </div>
 
-<!-- ADD GAME -->
-<div id="addModal" style="display:none;">
-<form method="POST">
+<!-- ADD MODAL -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <form method="POST">
 
-    <input type="hidden" name="action" value="create">
+            <input type="hidden" name="action" value="create">
 
-    <h3>Add Game</h3>
+            <h3>Add Game</h3>
 
-    <input name="name" placeholder="Game Name" required>
-    <input name="category" placeholder="Category" required>
-    <textarea name="description" placeholder="Description"></textarea>
+            <input name="name" placeholder="Game Name" required>
+            <input name="category" placeholder="Category" required>
+            <textarea name="description" placeholder="Description"></textarea>
 
-    <button type="submit">Create</button>
-    <button type="button" onclick="this.closest('#addModal').style.display='none'">Cancel</button>
+            <div class="modal-actions">
+                <button type="submit" class="btn">Create</button>
+                <button type="button" class="btn secondary" onclick="closeAddModal()">Cancel</button>
+            </div>
 
-</form>
+        </form>
+    </div>
 </div>
 
-<!-- EDIT BATCH -->
-<div id="editModal" style="display:none;">
-<form method="POST">
+<!-- EDIT MODAL -->
+<div id="editModal" class="modal">
+    <div class="modal-content large">
 
-    <input type="hidden" name="action" value="update_batch">
+        <form method="POST">
+            <input type="hidden" name="action" value="update_batch">
 
-    <h3>Edit Selected Games</h3>
+            <h3>Edit Selected Games</h3>
 
-    <div id="batchEditContainer"></div>
+            <div id="batchEditContainer"></div>
 
-    <button type="submit">Save Changes</button>
-    <button type="button" onclick="document.getElementById('editModal').style.display='none'">
-        Close
-    </button>
+            <div class="modal-actions">
+                <button type="submit" class="btn">Save Changes</button>
+                <button type="button" class="btn secondary" onclick="closeEditModal()">Cancel</button>
+            </div>
 
-</form>
+        </form>
+
+    </div>
 </div>
 
 <script>
@@ -225,6 +242,18 @@ function updateButtons() {
 }
 
 checkboxes.forEach(cb => cb.addEventListener('change', updateButtons));
+
+function openAddModal() {
+    document.getElementById('addModal').classList.add('show');
+}
+
+function closeAddModal() {
+    document.getElementById('addModal').classList.remove('show');
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.remove('show');
+}
 
 function submitDelete() {
 
@@ -250,23 +279,24 @@ function openBatchEdit() {
 
     const selected = [...document.querySelectorAll('.row:checked')];
     const container = document.getElementById('batchEditContainer');
+
     container.innerHTML = '';
 
     selected.forEach(cb => {
         const row = cb.closest('tr');
 
         container.innerHTML += `
-            <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+            <div style="border:1px solid var(--border); padding:10px; margin-bottom:10px;">
                 <input type="hidden" name="ids[]" value="${cb.value}">
 
                 <input name="name[]" value="${row.dataset.name}" placeholder="Name">
                 <input name="category[]" value="${row.dataset.category}" placeholder="Category">
-                <textarea name="description[]">${row.dataset.description}</textarea>
+                <textarea name="description[]" placeholder="Description">${row.dataset.description}</textarea>
             </div>
         `;
     });
 
-    document.getElementById('editModal').style.display = 'block';
+    document.getElementById('editModal').classList.add('show');
 }
 
 </script>

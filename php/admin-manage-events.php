@@ -13,7 +13,7 @@ require_once __DIR__ . "/../db_config.php";
 require_once __DIR__ . "/services/admin-events-services.php";
 
 /**
- * LOGOUT HANDLER (UNIFIED)
+ * LOGOUT HANDLER
  */
 if (isset($_POST['logout'])) {
     session_unset();
@@ -73,9 +73,6 @@ $stmt = $conn->prepare("
 $stmt->execute();
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-/**
- * DROPDOWNS
- */
 $games = $conn->query("SELECT id, name FROM games")->fetchAll(PDO::FETCH_ASSOC);
 
 $organisers = $conn->query("
@@ -95,6 +92,7 @@ $organisers = $conn->query("
 
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/home.css">
+<link rel="stylesheet" href="../css/admin.css">
 </head>
 
 <body>
@@ -103,62 +101,77 @@ $organisers = $conn->query("
 
 <header id="masthead">
     <a href="./admin-index.php">
-        <img src="../images/home-page-icon.png" class="home-page-icon">
+        <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
     </a>
 
     <p>ArenaSync (Admin)</p>
 
-    <nav>
-        <ul class="nav-links">
-            <li><a href="./admin-index.php">Home</a></li>
-            <li><a href="./admin-dashboard.php">Dashboard</a></li>
+    <nav class="navbar">
 
-            <!-- FIXED LOGOUT -->
+        <div class="hamburger" id="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <ul class="nav-links" id="nav-links">
+
+            <li>
+                <a href="./admin-index.php">
+                    <span>Home</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="./admin-dashboard.php">
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
             <li>
                 <form method="POST" style="display:inline;">
-                    <button type="submit" name="logout"
-                        style="background:none;border:none;color:inherit;cursor:pointer;">
-                        Logout
+                    <button type="submit" name="logout" class="nav-login-btn">
+                        <span>Logout</span>
                     </button>
                 </form>
             </li>
+
         </ul>
+
     </nav>
 </header>
 
 <div id="main-content">
 
 <aside id="sidebar">
-    <ul>
+
+    <div class="sidebar-header">
+        <h3>Admin Panel</h3>
+    </div>
+
+    <ul class="sidebar-menu">
         <li><a href="./admin-dashboard.php">Manage Users</a></li>
         <li><a class="active">Manage Events</a></li>
         <li><a href="./admin-manage-games.php">Manage Games</a></li>
         <li><a href="./admin-statistics.php">View Statistics</a></li>
     </ul>
+
 </aside>
 
 <main id="main">
 
-<h2>Manage Events</h2>
+<h2 class="section-title">Manage Events</h2>
 
-<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
-    <button onclick="document.getElementById('addModal').style.display='block'">
-        Add Event
-    </button>
-
-    <button id="editBtn" disabled onclick="openBatchEdit()">
-        Edit Event(s)
-    </button>
-
-    <button id="deleteBtn" disabled onclick="submitDelete()">
-        Delete Event(s)
-    </button>
+<div class="admin-actions">
+    <button class="btn" onclick="openAddModal()">Add Event</button>
+    <button class="btn secondary" id="editBtn" disabled onclick="openBatchEdit()">Edit</button>
+    <button class="btn danger" id="deleteBtn" disabled onclick="submitDelete()">Delete</button>
 </div>
 
-<table border="1" width="100%">
+<table class="admin-table">
 <thead>
 <tr>
-    <th>S/N</th>
+    <th>#</th>
     <th>Game</th>
     <th>Category</th>
     <th>Organizer</th>
@@ -207,64 +220,68 @@ if ($organizer === '') $organizer = 'N/A';
 </main>
 </div>
 
-<!-- ADD EVENT -->
-<div id="addModal" style="display:none;">
-<form method="POST">
+<!-- ADD MODAL -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
 
-    <input type="hidden" name="action" value="create">
+        <form method="POST">
+            <input type="hidden" name="action" value="create">
 
-    <h3>Add Event</h3>
+            <h3>Add Event</h3>
 
-    <label>Game</label>
-    <select name="game_id" required>
-        <option value="">Select Game</option>
-        <?php foreach ($games as $g): ?>
-            <option value="<?= $g['id'] ?>">
-                <?= htmlspecialchars($g['name']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+            <select name="game_id" required>
+                <option value="">Select Game</option>
+                <?php foreach ($games as $g): ?>
+                    <option value="<?= $g['id'] ?>">
+                        <?= htmlspecialchars($g['name']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-    <label>Organiser</label>
-    <select name="organiser_id" required>
-        <option value="">Select Organiser</option>
-        <?php foreach ($organisers as $o): ?>
-            <?php
-                $name = $o['company']
-                    ?: trim($o['first_name'] . ' ' . $o['last_name']);
-            ?>
-            <option value="<?= $o['id'] ?>">
-                <?= htmlspecialchars($name) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+            <select name="organiser_id" required>
+                <option value="">Select Organiser</option>
+                <?php foreach ($organisers as $o): ?>
+                    <?php
+                        $name = $o['company']
+                            ?: trim($o['first_name'] . ' ' . $o['last_name']);
+                    ?>
+                    <option value="<?= $o['id'] ?>">
+                        <?= htmlspecialchars($name) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-    <input name="date_time" type="datetime-local" required>
+            <input name="date_time" type="datetime-local" required>
 
-    <button type="submit">Create</button>
-    <button type="button" onclick="this.closest('#addModal').style.display='none'">
-        Cancel
-    </button>
+            <div class="modal-actions">
+                <button type="submit" class="btn">Create</button>
+                <button type="button" class="btn secondary" onclick="closeAddModal()">Cancel</button>
+            </div>
 
-</form>
+        </form>
+
+    </div>
 </div>
 
 <!-- EDIT MODAL -->
-<div id="editModal" style="display:none;">
-<form method="POST">
+<div id="editModal" class="modal">
+    <div class="modal-content large">
 
-    <input type="hidden" name="action" value="update_batch">
+        <form method="POST">
+            <input type="hidden" name="action" value="update_batch">
 
-    <h3>Edit Events</h3>
+            <h3>Edit Selected Events</h3>
 
-    <div id="batchEditContainer"></div>
+            <div id="batchEditContainer"></div>
 
-    <button type="submit">Save Changes</button>
-    <button type="button" onclick="document.getElementById('editModal').style.display='none'">
-        Close
-    </button>
+            <div class="modal-actions">
+                <button type="submit" class="btn">Save Changes</button>
+                <button type="button" class="btn secondary" onclick="closeEditModal()">Cancel</button>
+            </div>
 
-</form>
+        </form>
+
+    </div>
 </div>
 
 <script>
@@ -281,9 +298,22 @@ function updateButtons() {
 
 checkboxes.forEach(cb => cb.addEventListener('change', updateButtons));
 
+function openAddModal() {
+    document.getElementById('addModal').classList.add('show');
+}
+
+function closeAddModal() {
+    document.getElementById('addModal').classList.remove('show');
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.remove('show');
+}
+
 function submitDelete() {
 
     const rows = [...document.querySelectorAll('.row:checked')];
+    if (rows.length === 0) return;
 
     if (!confirm(`Delete ${rows.length} event(s)?`)) return;
 
@@ -305,20 +335,41 @@ function openBatchEdit() {
 
     const selected = [...document.querySelectorAll('.row:checked')];
     const container = document.getElementById('batchEditContainer');
+
     container.innerHTML = '';
 
     selected.forEach(cb => {
         const row = cb.closest('tr');
 
+        const game = row.dataset.game;
+        const category = row.dataset.category;
+        const datetime = row.dataset.datetime;
+
         container.innerHTML += `
-            <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+            <div style="border:1px solid var(--border); padding:15px; margin-bottom:12px; border-radius:8px; background:var(--bg-card);">
+
+                <div style="margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border);">
+
+                    <strong style="color:var(--accent); font-size:0.95rem;">
+                        ${game}
+                    </strong>
+
+                    <div style="font-size:0.8rem; color:var(--text-muted); margin-top:3px;">
+                        Event ID: ${cb.value} | Category: ${category}
+                    </div>
+
+                </div>
+
                 <input type="hidden" name="ids[]" value="${cb.value}">
-                <input name="date_time[]" value="${row.dataset.datetime}" type="datetime-local">
+
+                <label style="font-size:0.8rem; color:var(--text-muted);">Date & Time</label>
+                <input name="date_time[]" value="${datetime}" type="datetime-local">
+
             </div>
         `;
     });
 
-    document.getElementById('editModal').style.display = 'block';
+    document.getElementById('editModal').classList.add('show');
 }
 
 </script>

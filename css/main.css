@@ -263,3 +263,41 @@ html {
     50%  { box-shadow: 0 0 24px rgba(0, 195, 255, 0.6); }
     100% { box-shadow: 0 0 10px rgba(0, 195, 255, 0.3); }
 }
+
+/* ── Helper Styling by Miguel for the admin page── */
+
+/* Make buttons behave like nav links visually */
+#masthead nav ul button.nav-login-btn {
+    font: inherit;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 7px 15px;
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.15s, background-color 0.2s, color 0.2s;
+}
+
+/* Match anchor hover skew behaviour */
+#masthead nav ul button.nav-login-btn:hover {
+    transform: skewX(-20deg);
+    background-color: var(--accent);
+    color: var(--bg);
+}
+
+/* Fix inner text skew consistency (like your <span>) */
+#masthead nav ul button.nav-login-btn span {
+    display: inline-block;
+    transition: transform 0.15s;
+}
+
+/* undo skew inside button so text stays readable */
+#masthead nav ul button.nav-login-btn:hover span {
+    transform: skewX(20deg);
+}
+
+/* ensure form doesn't break flex layout */
+#masthead nav ul li form {
+    margin: 0;
+    display: inline;
+}

@@ -11,7 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     try {
 
-        // use the connection from db_config.php
         $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND role = 'admin'");
         $stmt->execute([$email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -43,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <title>ArenaSync | Admin Login</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/login.css">
+  <link rel="stylesheet" href="../css/admin.css">
 </head>
 
 <body>
@@ -86,7 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
       <form id="loginForm" method="POST" action="">
         
-        <!-- Hidden role (kept for consistency, optional) -->
         <input type="hidden" name="userRole" value="admin">
 
         <!-- Email -->

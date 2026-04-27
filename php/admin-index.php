@@ -23,6 +23,7 @@ if (isset($_POST['logout'])) {
     <title>ArenaSync | Admin Home</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/admin.css">
     <script src="https://unpkg.com/globe.gl"></script>
 </head>
 

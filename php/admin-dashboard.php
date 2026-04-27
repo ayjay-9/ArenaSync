@@ -4,9 +4,6 @@ session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-/**
- * PROTECT PAGE
- */
 if (!isset($_SESSION['admin_id'])) {
     header("Location: ./admin-login.php");
     exit();
@@ -15,9 +12,6 @@ if (!isset($_SESSION['admin_id'])) {
 require_once $_SERVER['DOCUMENT_ROOT'] . "/ArenaSync/db_config.php";
 require_once __DIR__ . "/services/admin-user-services.php";
 
-/**
- * LOGOUT HANDLER
- */
 if (isset($_POST['logout'])) {
     session_unset();
     session_destroy();
@@ -25,23 +19,17 @@ if (isset($_POST['logout'])) {
     exit();
 }
 
-/**
- * HANDLE CRUD ACTIONS
- */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
 
     $action = $_POST['action'] ?? '';
 
     switch ($action) {
-
         case 'create':
             createUser($conn, $_POST);
             break;
-
         case 'update_batch':
             updateUsersBatch($conn, $_POST);
             break;
-
         case 'delete':
             deleteUsers($conn, $_POST['ids'] ?? []);
             break;
@@ -51,9 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
     exit();
 }
 
-/**
- * LOAD USERS
- */
 $stmt = $conn->prepare("
     SELECT id, role, first_name, last_name, company, email, created_at, last_visited
     FROM users
@@ -72,6 +57,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <link rel="stylesheet" href="../css/main.css">
 <link rel="stylesheet" href="../css/home.css">
+<link rel="stylesheet" href="../css/admin.css">
 </head>
 
 <body>
@@ -80,22 +66,26 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <header id="masthead">
     <a href="./admin-index.php">
-        <img src="../images/home-page-icon.png" class="home-page-icon">
+        <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
     </a>
 
     <p>ArenaSync (Admin)</p>
 
-    <nav>
-        <ul class="nav-links">
-            <li><a href="./admin-index.php">Home</a></li>
-            <li><a href="./admin-dashboard.php">Dashboard</a></li>
+    <nav class="navbar">
+        <div class="hamburger" id="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
 
-            <!-- LOGOUT -->
+        <ul class="nav-links" id="nav-links">
+            <li><a href="./admin-index.php"><span>Home</span></a></li>
+            <li><a href="./admin-dashboard.php"><span>Dashboard</span></a></li>
+
             <li>
                 <form method="POST" style="display:inline;">
-                    <button type="submit" name="logout"
-                        style="background:none;border:none;color:inherit;cursor:pointer;">
-                        Logout
+                    <button type="submit" name="logout" class="nav-login-btn">
+                        <span>Logout</span>
                     </button>
                 </form>
             </li>
@@ -106,7 +96,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div id="main-content">
 
 <aside id="sidebar">
-    <ul>
+    <div class="sidebar-header">
+        <h3>Admin Panel</h3>
+    </div>
+
+    <ul class="sidebar-menu">
         <li><a class="active">Manage Users</a></li>
         <li><a href="./admin-manage-events.php">Manage Events</a></li>
         <li><a href="./admin-manage-games.php">Manage Games</a></li>
@@ -116,99 +110,100 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <main id="main">
 
-<h2>Manage Users</h2>
+<h2 class="section-title">Manage Users</h2>
 
-<div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
-    <button onclick="document.getElementById('addModal').style.display='block'">
-        Add User
-    </button>
-
-    <button id="editBtn" disabled onclick="openBatchEdit()">
-        Edit User(s)
-    </button>
-
-    <button id="deleteBtn" disabled onclick="submitDelete()">
-        Delete User(s)
-    </button>
+<div class="admin-actions">
+    <button class="btn" onclick="openAddModal()">Add User</button>
+    <button class="btn secondary" id="editBtn" disabled onclick="openBatchEdit()">Edit</button>
+    <button class="btn danger" id="deleteBtn" disabled onclick="submitDelete()">Delete</button>
 </div>
 
-<table border="1" width="100%">
+<table class="admin-table">
 <thead>
 <tr>
-    <th>S/N</th>
+    <th>#</th>
     <th>Role</th>
     <th>Name / Company</th>
     <th>Email</th>
-    <th>Created At</th>
-    <th>Last Visited</th>
+    <th>Created</th>
+    <th>Last Visit</th>
     <th>Select</th>
 </tr>
 </thead>
 
 <tbody>
-
 <?php $i = 1; foreach ($users as $u): ?>
-
-<?php
-$name = $u['company'] ?: trim($u['first_name'] . ' ' . $u['last_name']);
-?>
+<?php $name = $u['company'] ?: trim($u['first_name'] . ' ' . $u['last_name']); ?>
 
 <tr
     data-id="<?= $u['id'] ?>"
     data-role="<?= $u['role'] ?>"
-    data-first="<?= htmlspecialchars($u['first_name']) ?>"
-    data-last="<?= htmlspecialchars($u['last_name']) ?>"
     data-company="<?= htmlspecialchars($u['company']) ?>"
     data-email="<?= htmlspecialchars($u['email']) ?>"
 >
-
 <td><?= $i++ ?></td>
 <td><?= htmlspecialchars($u['role']) ?></td>
 <td><?= htmlspecialchars($name ?: 'N/A') ?></td>
 <td><?= htmlspecialchars($u['email']) ?></td>
 <td><?= htmlspecialchars($u['created_at']) ?></td>
 <td><?= htmlspecialchars($u['last_visited'] ?? 'Never') ?></td>
-
-<td>
-    <input type="checkbox" class="row" value="<?= $u['id'] ?>">
-</td>
-
+<td><input type="checkbox" class="row" value="<?= $u['id'] ?>"></td>
 </tr>
 
 <?php endforeach; ?>
-
 </tbody>
 </table>
 
 </main>
 </div>
 
-<!-- ADD USER -->
-<div id="addModal" style="display:none;">
-<form method="POST">
+<div id="addModal" class="modal">
+    <div class="modal-content large">
 
-    <input type="hidden" name="action" value="create">
+        <form method="POST">
+            <input type="hidden" name="action" value="create">
 
-    <h3>Add User</h3>
+            <h3>Add User</h3>
 
-    <select name="role" required>
-        <option value="admin">Admin</option>
-        <option value="attendee">Attendee</option>
-        <option value="organiser">Organiser</option>
-    </select>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Company</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                    </tr>
+                </thead>
 
-    <input name="first_name" placeholder="First Name">
-    <input name="last_name" placeholder="Last Name">
-    <input name="company" placeholder="Company">
-    <input name="email" placeholder="Email" required>
-    <input name="password" placeholder="Password" required>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select name="role" required>
+                                <option value="admin">Admin</option>
+                                <option value="attendee">Attendee</option>
+                                <option value="organiser">Organiser</option>
+                            </select>
+                        </td>
 
-    <button type="submit">Create</button>
-    <button type="button" onclick="document.getElementById('addModal').style.display='none'">
-        Cancel
-    </button>
+                        <td><input name="first_name"></td>
+                        <td><input name="last_name"></td>
+                        <td><input name="company"></td>
+                        <td><input name="email" required></td>
+                        <td><input name="password" required></td>
+                    </tr>
+                </tbody>
+            </table>
 
-</form>
+            <div class="modal-actions">
+                <button type="submit" class="btn">Create User</button>
+                <button type="button" class="btn secondary" onclick="closeAddModal()">Cancel</button>
+            </div>
+
+        </form>
+
+    </div>
 </div>
 
 <script>
@@ -225,10 +220,16 @@ function updateButtons() {
 
 checkboxes.forEach(cb => cb.addEventListener('change', updateButtons));
 
+function openAddModal() {
+    document.getElementById('addModal').classList.add('show');
+}
+
+function closeAddModal() {
+    document.getElementById('addModal').classList.remove('show');
+}
+
 function submitDelete() {
-
     const rows = [...document.querySelectorAll('.row:checked')];
-
     if (rows.length === 0) return;
 
     if (!confirm(`Delete ${rows.length} user(s)?`)) return;
@@ -250,50 +251,82 @@ function submitDelete() {
 function openBatchEdit() {
 
     const selected = [...document.querySelectorAll('.row:checked')];
-
     if (selected.length === 0) return;
 
-    let container = document.getElementById('editModal');
+    let modal = document.getElementById('editModal');
 
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'editModal';
-        container.style = "position:fixed;top:10%;left:10%;right:10%;background:#fff;padding:20px;border:1px solid #ccc;";
-        document.body.appendChild(container);
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'editModal';
+        modal.className = 'modal';
+        document.body.appendChild(modal);
     }
 
     let html = `
+        <div class="modal-content large">
         <form method="POST">
+
         <input type="hidden" name="action" value="update_batch">
-        <h3>Edit Selected Users</h3>
+
+        <h3>Edit Users (${selected.length})</h3>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Company</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
     `;
 
     selected.forEach(cb => {
         const row = cb.closest('tr');
 
         html += `
-            <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+            <tr>
                 <input type="hidden" name="ids[]" value="${cb.value}">
 
-                <select name="role[]">
-                    <option value="admin" ${row.dataset.role === 'admin' ? 'selected' : ''}>Admin</option>
-                    <option value="attendee" ${row.dataset.role === 'attendee' ? 'selected' : ''}>Attendee</option>
-                    <option value="organiser" ${row.dataset.role === 'organiser' ? 'selected' : ''}>Organiser</option>
-                </select>
+                <td>
+                    <select name="role[]">
+                        <option value="admin" ${row.dataset.role === 'admin' ? 'selected' : ''}>Admin</option>
+                        <option value="attendee" ${row.dataset.role === 'attendee' ? 'selected' : ''}>Attendee</option>
+                        <option value="organiser" ${row.dataset.role === 'organiser' ? 'selected' : ''}>Organiser</option>
+                    </select>
+                </td>
 
-                <input name="company[]" value="${row.dataset.company || ''}" placeholder="Company">
-                <input name="email[]" value="${row.dataset.email}" placeholder="Email">
-            </div>
+                <td>
+                    <input name="company[]" value="${row.dataset.company || ''}">
+                </td>
+
+                <td>
+                    <input name="email[]" value="${row.dataset.email}">
+                </td>
+            </tr>
         `;
     });
 
     html += `
-        <button type="submit">Save Changes</button>
-        <button type="button" onclick="location.reload()">Cancel</button>
+            </tbody>
+        </table>
+
+        <div class="modal-actions">
+            <button type="submit" class="btn">Save Changes</button>
+            <button type="button" class="btn secondary" onclick="closeEditModal()">Cancel</button>
+        </div>
+
         </form>
+        </div>
     `;
 
-    container.innerHTML = html;
+    modal.innerHTML = html;
+    modal.classList.add('show');
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('editModal');
+    if (modal) modal.classList.remove('show');
 }
 
 </script>
