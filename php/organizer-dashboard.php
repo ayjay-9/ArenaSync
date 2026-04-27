@@ -1,6 +1,7 @@
 <?php
   session_start();
   require_once '../db_config.php';
+  require_once 'remember-me.php';
 
   if (!isset($_SESSION['organizer_id'])) {
     header("Location: organizer-login.php");
@@ -14,6 +15,13 @@
     $action = $_POST['action'] ?? '';
 
     if ($action === 'logout') {
+      if (isset($_COOKIE['remember_me'])) {
+        $clr = $conn->prepare("UPDATE users SET remember_token = NULL WHERE remember_token = ?");
+        $clr->bind_param("s", $_COOKIE['remember_me']);
+        $clr->execute();
+        $clr->close();
+        setcookie('remember_me', '', time() - 3600, "/");
+      }
       session_unset();
       session_destroy();
       header("Location: ../index.php");
