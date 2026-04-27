@@ -3,6 +3,7 @@
     session_start();
     // Include the database connection and organizer-related functions
     require_once '../db_config.php';
+    require_once 'remember-me.php';
 
     // Check if the user is logged in as an attendee; if not, redirect to the login page
     if (!isset($_SESSION['attendee_id'])) {

@@ -1,6 +1,8 @@
 <?php
     // Start the session to manage user state across pages
     session_start();
+    require_once '../db_config.php';
+    require_once 'remember-me.php';
     // Check if the user is logged in as an attendee; if not, redirect to the login page
     if (!isset($_SESSION['attendee_id'])) {
         header("Location: ./login.php");
