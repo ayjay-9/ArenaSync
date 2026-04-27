@@ -107,6 +107,8 @@
     <title>ArenaSync | My Arena</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/my_arena.css">
+    <link rel="stylesheet" href="../css/chatbot.css">
+    <script src="../js/chatbot.js" defer></script>
 </head>
 
 <body>

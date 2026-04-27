@@ -92,6 +92,8 @@
   <title>ArenaSync | Organizer Dashboard</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/organizer-dashboard.css">
+  <link rel="stylesheet" href="../css/chatbot.css">
+  <script src="../js/chatbot.js" defer></script>
 </head>
 <body>
   <div id="container">
