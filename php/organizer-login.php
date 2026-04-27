@@ -1,3 +1,32 @@
+<?php
+  session_start();
+  require_once '../db_config.php';
+
+  $error = "";
+
+  if ($_SERVER['REQUEST_METHOD'] === "POST") {
+    $email    = trim($_POST['email']);
+    $password = $_POST['password'];
+
+    $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ? AND role = 'organiser'");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) {
+      $user = $result->fetch_assoc();
+      if (password_verify($password, $user['password'])) {
+        $_SESSION['organizer_id'] = $user['id'];
+        header("Location: organizer-dashboard.php");
+        exit();
+      }
+      $error = "Incorrect password";
+    } else {
+      $error = "No organizer account found with that email";
+    }
+    $stmt->close();
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,9 +71,11 @@
         <a href="./admin-login.php">Admin</a>
       </div>
 
-      <form id="loginForm">
-        <!-- Hidden input to store the organizer role for login -->
-        <input type ="hidden" id="userRole" name="userRole" value="organizer">
+      <form id="loginForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" novalidate>
+        <input type="hidden" id="userRole" name="userRole" value="organizer">
+        <?php if (!empty($error)): ?>
+          <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
+        <?php endif; ?>
 
         <!-- Email field -->
         <div class="input-group">
