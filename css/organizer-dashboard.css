@@ -1,0 +1,182 @@
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Bebas Neue', 'Poppins', sans-serif;
+    font-weight: bolder;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+main.dashboard-main {
+    flex: 1;
+    width: 90%;
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.section-title {
+    color: var(--accent);
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
+    margin: 0 0 1.5rem;
+}
+
+/* ── Cards (create + events) ──────────────────── */
+.create-section,
+.events-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.create-section h2,
+.events-section h2 {
+    color: var(--accent);
+    font-size: 1.25rem;
+    letter-spacing: 0.05em;
+    margin: 0 0 1.25rem;
+}
+
+/* ── Create-event form ────────────────────────── */
+.create-section form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.create-section label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: normal;
+    letter-spacing: 0.05em;
+}
+
+.create-section input,
+.create-section select,
+.cell-datetime input,
+.cell-game select {
+    padding: 0.6rem 0.75rem;
+    background: var(--bg-surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: inherit;
+    font-weight: normal;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.create-section input:focus,
+.create-section select:focus,
+.cell-datetime input:focus,
+.cell-game select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(0, 195, 255, 0.25);
+}
+
+/* ── Events table ─────────────────────────────── */
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.25rem;
+}
+
+.events-table th,
+.events-table td {
+    padding: 0.85rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-weight: normal;
+    letter-spacing: 0.04em;
+}
+
+.events-table th {
+    color: var(--accent);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.events-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* ── Action buttons ───────────────────────────── */
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn {
+    padding: 0.6rem 1.4rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+    background: var(--accent2);
+    color: var(--text);
+}
+
+.btn:disabled {
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+/* ── Logout button in navbar ──────────────────── */
+.nav-links form button.nav-login-btn {
+    background: transparent;
+    border: 1px solid var(--accent2);
+    border-radius: 6px;
+    color: var(--text-muted);
+    padding: 0.4rem 1rem;
+    font-family: inherit;
+    font-weight: bold;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.nav-links form button.nav-login-btn:hover {
+    background: var(--accent2);
+    color: var(--text);
+    border-color: var(--accent2);
+}
+
+/* ── Error banner ─────────────────────────────── */
+.error-message {
+    background: rgba(255, 77, 109, 0.1);
+    border: 1px solid rgba(255, 77, 109, 0.4);
+    color: #ff4d6d;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-weight: normal;
+}
