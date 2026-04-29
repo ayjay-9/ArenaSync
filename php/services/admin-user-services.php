@@ -22,6 +22,9 @@ function createUser($conn, $data)
     $stmt->execute();
 }
 
+/* ─────────────────────────────
+  SINGLE UPDATE
+───────────────────────────── */
 function updateUser($conn, $id, $data)
 {
     $stmt = $conn->prepare("
@@ -43,49 +46,54 @@ function updateUser($conn, $id, $data)
     $stmt->execute();
 }
 
+/* ─────────────────────────────
+  UPDATE 
+───────────────────────────── */
 function updateUsersBatch($conn, $data)
 {
-    if (empty($data['ids'])) return;
+    if (empty($data['ids']) || !is_array($data['ids'])) return;
 
-    foreach ($data['ids'] as $i => $id) {
+    foreach ($data['ids'] as $index => $id) {
 
-        $role = $data['role'][$i];
-        $company = $data['company'][$i] ?? null;
-        $email = $data['email'][$i];
+        $role = $data['role'][$index] ?? null;
+        $company = $data['company'][$index] ?? null;
+        $email = $data['email'][$index] ?? null;
 
-        $sql = "UPDATE users SET role=?, company=?, email=?";
-        $params = [$role, $company, $email];
-        $types = "sss";
+        if (!$role || !$email) continue;
 
-        if (!empty($data['password'][$i])) {
-            $sql .= ", password=?";
-            $params[] = password_hash($data['password'][$i], PASSWORD_BCRYPT);
-            $types .= "s";
-        }
+        $stmt = $conn->prepare("
+            UPDATE users
+            SET role=?, company=?, email=?
+            WHERE id=?
+        ");
 
-        $sql .= " WHERE id=?";
-        $params[] = $id;
-        $types .= "i";
+        $stmt->bind_param(
+            "sssi",
+            $role,
+            $company,
+            $email,
+            $id
+        );
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param($types, ...$params);
         $stmt->execute();
     }
 }
 
+/* ─────────────────────────────
+   DELETE
+───────────────────────────── */
 function deleteUsers($conn, $ids)
 {
-    if (is_string($ids)) {
-        $ids = json_decode($ids, true);
-    }
-
     if (!is_array($ids) || empty($ids)) return;
+
+    $ids = array_map('intval', $ids);
 
     $placeholders = implode(',', array_fill(0, count($ids), '?'));
     $types = str_repeat('i', count($ids));
 
     $stmt = $conn->prepare("DELETE FROM users WHERE id IN ($placeholders)");
     $stmt->bind_param($types, ...$ids);
+
     $stmt->execute();
 }
 

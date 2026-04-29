@@ -301,3 +301,40 @@ html {
     margin: 0;
     display: inline;
 }
+
+/* ─────────────────────────────
+   THEME OVERRIDES (REQUIRED FOR JS THEME SWITCH) (Miguel hehehe)
+───────────────────────────── */
+
+:root[data-theme="light"] {
+    --bg: #ffffff;
+    --bg-card: #f5f5f5;
+    --bg-surface: #ffffff;
+    --accent: #00a3ff;
+    --accent2: #7c3aed;
+    --text: #111111;
+    --text-muted: rgba(0,0,0,0.6);
+    --border: rgba(0,0,0,0.12);
+}
+
+:root[data-theme="dark"] {
+    --bg: #080813;
+    --bg-card: #111126;
+    --bg-surface: #1a1a35;
+    --accent: #00c3ff;
+    --accent2: #7c3aed;
+    --text: #f0f0ff;
+    --text-muted: rgba(240, 240, 255, 0.55);
+    --border: rgba(0, 195, 255, 0.18);
+}
+
+:root[data-theme="negative"] {
+    --bg: #0b0b0b;
+    --bg-card: #1a0000;
+    --bg-surface: #240000;
+    --accent: #ff2d2d;
+    --accent2: #ff7b00;
+    --text: #ffdddd;
+    --text-muted: rgba(255, 120, 120, 0.6);
+    --border: rgba(255, 0, 0, 0.25);
+}

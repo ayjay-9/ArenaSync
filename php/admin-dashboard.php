@@ -12,9 +12,7 @@ if (!isset($_SESSION['admin_id'])) {
 require_once $_SERVER['DOCUMENT_ROOT'] . "/ArenaSync/db_config.php";
 require_once __DIR__ . "/services/admin-user-services.php";
 
-/**
- * LOGOUT
- */
+/* LOGOUT */
 if (isset($_POST['logout'])) {
     session_unset();
     session_destroy();
@@ -22,9 +20,7 @@ if (isset($_POST['logout'])) {
     exit();
 }
 
-/**
- * ACTIONS
- */
+/* ACTIONS */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
 
     $action = $_POST['action'] ?? '';
@@ -47,9 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
     exit();
 }
 
-/**
- * LOAD USERS
- */
+/* USERS */
 $result = $conn->query("
     SELECT id, role, first_name, last_name, company, email, created_at, last_visited
     FROM users
@@ -79,6 +73,7 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
 <div id="container">
 
 <header id="masthead">
+
     <a href="./admin-index.php">
         <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
     </a>
@@ -86,25 +81,54 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
     <p>ArenaSync (Admin)</p>
 
     <nav class="navbar">
-        <div class="hamburger" id="hamburger">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
+
+        <div class="nav-left">
+
+            <ul class="nav-links">
+
+                <li class="nav-item-with-theme">
+
+                    <div class="theme-toggle inline-theme">
+                        <div class="theme-slider">
+                            <div class="theme-knob"></div>
+
+                            <button data-theme="light">Light</button>
+                            <button data-theme="dark">Dark</button>
+                            <button data-theme="negative">Blood</button>
+                        </div>
+                    </div>
+
+                    <a href="./admin-index.php"><span>Home</span></a>
+                </li>
+
+                <li><a href="./admin-dashboard.php"><span>Dashboard</span></a></li>
+
+            </ul>
+
         </div>
 
-        <ul class="nav-links" id="nav-links">
-            <li><a href="./admin-index.php"><span>Home</span></a></li>
-            <li><a href="./admin-dashboard.php"><span>Dashboard</span></a></li>
+        <div class="nav-right">
 
-            <li>
-                <form method="POST" style="display:inline;">
-                    <button type="submit" name="logout" class="nav-login-btn">
-                        <span>Logout</span>
-                    </button>
-                </form>
-            </li>
-        </ul>
+            <div class="hamburger" id="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+
+            <ul class="nav-links">
+                <li>
+                    <form method="POST">
+                        <button type="submit" name="logout" class="nav-login-btn">
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+
+        </div>
+
     </nav>
+
 </header>
 
 <div id="main-content">
@@ -179,37 +203,32 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
 <!-- ADD MODAL -->
 <div id="addModal" class="modal">
     <div class="modal-content large">
-
         <form method="POST">
             <input type="hidden" name="action" value="create">
 
             <h3>Add User</h3>
 
-            <div class="form-grid">
-                <select name="role" required>
-                    <option value="admin">Admin</option>
-                    <option value="attendee">Attendee</option>
-                    <option value="organiser">Organiser</option>
-                </select>
+            <!-- controlled role selection -->
+            <select name="role" required>
+                <option value="" disabled selected>Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="attendee">Attendee</option>
+                <option value="organiser">Organiser</option>
+            </select>
 
-                <input name="first_name" placeholder="First Name">
-                <input name="last_name" placeholder="Last Name">
-                <input name="company" placeholder="Company">
-                <input name="email" placeholder="Email" required>
-                <input name="password" type="password" placeholder="Password" required>
-            </div>
+            <input name="first_name" placeholder="First Name">
+            <input name="last_name" placeholder="Last Name">
+            <input name="company" placeholder="Company">
+            <input name="email" placeholder="Email" required>
+            <input name="password" type="password" placeholder="Password" required>
 
-            <div class="modal-actions">
-                <button type="submit" class="btn">Create User</button>
-                <button type="button" class="btn secondary" onclick="closeAddModal()">Cancel</button>
-            </div>
-
+            <button type="submit" class="btn">Create User</button>
+            <button type="button" class="btn secondary" onclick="closeAddModal()">Cancel</button>
         </form>
-
     </div>
 </div>
 
-<!-- EDIT MODAL  -->
+<!-- EDIT MODAL -->
 <div id="editModal" class="modal">
     <div class="modal-content large">
 
@@ -220,10 +239,8 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
 
             <div id="batchEditContainer"></div>
 
-            <div class="modal-actions">
-                <button type="submit" class="btn">Save Changes</button>
-                <button type="button" class="btn secondary" onclick="closeEditModal()">Cancel</button>
-            </div>
+            <button type="submit" class="btn">Save Changes</button>
+            <button type="button" class="btn secondary" onclick="closeEditModal()">Cancel</button>
 
         </form>
 
@@ -231,87 +248,82 @@ $users = $result->fetch_all(MYSQLI_ASSOC);
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
 
-const checkboxes = document.querySelectorAll('.row');
-const editBtn = document.getElementById('editBtn');
-const deleteBtn = document.getElementById('deleteBtn');
+    const checkboxes = document.querySelectorAll(".row");
+    const editBtn = document.getElementById("editBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
 
-function updateButtons() {
-    const checked = document.querySelectorAll('.row:checked').length;
-    editBtn.disabled = checked === 0;
-    deleteBtn.disabled = checked === 0;
-}
+    function selectedIds() {
+        return [...checkboxes]
+            .filter(c => c.checked)
+            .map(c => c.value);
+    }
 
-checkboxes.forEach(cb => cb.addEventListener('change', updateButtons));
+    function updateButtons() {
+        const has = selectedIds().length > 0;
+        editBtn.disabled = !has;
+        deleteBtn.disabled = !has;
+    }
 
-function openAddModal() {
-    document.getElementById('addModal').classList.add('show');
-}
+    checkboxes.forEach(c => c.addEventListener("change", updateButtons));
+    updateButtons();
 
-function closeAddModal() {
-    document.getElementById('addModal').classList.remove('show');
-}
+    window.submitDelete = function () {
+        const ids = selectedIds();
+        if (!ids.length) return;
 
-function closeEditModal() {
-    document.getElementById('editModal').classList.remove('show');
-}
+        if (!confirm("Delete selected users?")) return;
 
-function submitDelete() {
+        const form = document.createElement("form");
+        form.method = "POST";
 
-    const rows = [...document.querySelectorAll('.row:checked')];
-    if (!rows.length) return;
+        form.innerHTML = `<input name="action" value="delete">`;
 
-    if (!confirm(`Delete ${rows.length} user(s)?`)) return;
+        ids.forEach(id => {
+            const input = document.createElement("input");
+            input.name = "ids[]";
+            input.value = id;
+            form.appendChild(input);
+        });
 
-    const ids = rows.map(c => c.value);
+        document.body.appendChild(form);
+        form.submit();
+    };
 
-    const form = document.createElement('form');
-    form.method = 'POST';
+    window.openAddModal = () =>
+        document.getElementById("addModal").classList.add("show");
 
-    form.innerHTML = `
-        <input name="action" value="delete">
-        <input name="ids" value='${JSON.stringify(ids)}'>
-    `;
+    window.closeAddModal = () =>
+        document.getElementById("addModal").classList.remove("show");
 
-    document.body.appendChild(form);
-    form.submit();
-}
+    window.openBatchEdit = () => {
+        const container = document.getElementById("batchEditContainer");
+        container.innerHTML = "";
 
-function openBatchEdit() {
+        selectedIds().forEach(id => {
+            const row = document.querySelector(`tr[data-id="${id}"]`);
 
-    const selected = [...document.querySelectorAll('.row:checked')];
-    const container = document.getElementById('batchEditContainer');
+            container.innerHTML += `
+                <input type="hidden" name="ids[]" value="${id}">
+                <input name="role[]" value="${row.dataset.role}">
+                <input name="company[]" value="${row.dataset.company}">
+                <input name="email[]" value="${row.dataset.email}">
+                <input name="password[]" placeholder="New password (optional)">
+                <hr>
+            `;
+        });
 
-    container.innerHTML = '';
+        document.getElementById("editModal").classList.add("show");
+    };
 
-    selected.forEach(cb => {
-        const row = cb.closest('tr');
+    window.closeEditModal = () =>
+        document.getElementById("editModal").classList.remove("show");
 
-        container.innerHTML += `
-            <div style="border:1px solid var(--border); padding:12px; margin-bottom:10px;">
-
-                <input type="hidden" name="ids[]" value="${cb.value}">
-
-                <select name="role[]">
-                    <option value="admin" ${row.dataset.role === 'admin' ? 'selected' : ''}>Admin</option>
-                    <option value="attendee" ${row.dataset.role === 'attendee' ? 'selected' : ''}>Attendee</option>
-                    <option value="organiser" ${row.dataset.role === 'organiser' ? 'selected' : ''}>Organiser</option>
-                </select>
-
-                <input name="company[]" value="${row.dataset.company || ''}" placeholder="Company">
-                <input name="email[]" value="${row.dataset.email}" placeholder="Email">
-
-                <!-- PASSWORD FIX -->
-                <input name="password[]" type="password" placeholder="New Password (leave empty to keep)">
-
-            </div>
-        `;
-    });
-
-    document.getElementById('editModal').classList.add('show');
-}
-
+});
 </script>
+
+<script src="../js/admin-cookies.js"></script>
 
 </body>
 </html>
