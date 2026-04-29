@@ -1,6 +1,8 @@
 <?php
     // Start the session to manage user state across pages
     session_start();
+    require_once '../db_config.php';
+    require_once 'remember-me.php';
     // Check if the user is logged in as an attendee; if not, redirect to the login page
     if (!isset($_SESSION['attendee_id'])) {
         header("Location: ./login.php");
@@ -17,9 +19,11 @@
     <title>ArenaSync | Events</title>
     <link rel="stylesheet" href="../css/events.css">
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/chatbot.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <script src="../js/events.js" defer></script>
+    <script src="../js/chatbot.js" defer></script>
 </head>
 
 <body>
