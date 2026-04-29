@@ -50,13 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
 /**
  * LOAD GAMES
  */
-$stmt = $conn->prepare("
+$result = $conn->query("
     SELECT id, name, category, description
     FROM games
     ORDER BY id DESC
 ");
-$stmt->execute();
-$games = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$games = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!doctype html>

@@ -49,37 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
 }
 
 /**
- * LOAD EVENTS
+ * LOAD DATA 
  */
-$stmt = $conn->prepare("
-    SELECT 
-        events.id,
-        events.date_time,
-        games.name AS game_name,
-        games.category AS game_category,
-        users.company,
-        users.first_name,
-        users.last_name,
-        (
-            SELECT COUNT(*) 
-            FROM bookings 
-            WHERE bookings.event_id = events.id
-        ) AS bookings_count
-    FROM events
-    JOIN games ON events.game_id = games.id
-    JOIN users ON events.organiser_id = users.id
-    ORDER BY events.date_time DESC
-");
-$stmt->execute();
-$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$games = $conn->query("SELECT id, name FROM games")->fetchAll(PDO::FETCH_ASSOC);
-
-$organisers = $conn->query("
-    SELECT id, company, first_name, last_name 
-    FROM users 
-    WHERE role = 'organiser'
-")->fetchAll(PDO::FETCH_ASSOC);
+$events = getAllEvents($conn);
+$games = getGames($conn);
+$organisers = getOrganisers($conn);
 ?>
 
 <!doctype html>
@@ -116,17 +90,8 @@ $organisers = $conn->query("
 
         <ul class="nav-links" id="nav-links">
 
-            <li>
-                <a href="./admin-index.php">
-                    <span>Home</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="./admin-dashboard.php">
-                    <span>Dashboard</span>
-                </a>
-            </li>
+            <li><a href="./admin-index.php"><span>Home</span></a></li>
+            <li><a href="./admin-dashboard.php"><span>Dashboard</span></a></li>
 
             <li>
                 <form method="POST" style="display:inline;">
@@ -137,14 +102,12 @@ $organisers = $conn->query("
             </li>
 
         </ul>
-
     </nav>
 </header>
 
 <div id="main-content">
 
 <aside id="sidebar">
-
     <div class="sidebar-header">
         <h3>Admin Panel</h3>
     </div>
@@ -155,7 +118,6 @@ $organisers = $conn->query("
         <li><a href="./admin-manage-games.php">Manage Games</a></li>
         <li><a href="./admin-statistics.php">View Statistics</a></li>
     </ul>
-
 </aside>
 
 <main id="main">
@@ -198,7 +160,6 @@ if ($organizer === '') $organizer = 'N/A';
     data-category="<?= htmlspecialchars($e['game_category']) ?>"
     data-datetime="<?= htmlspecialchars($e['date_time']) ?>"
 >
-
 <td><?= $i++ ?></td>
 <td><?= htmlspecialchars($e['game_name']) ?></td>
 <td><?= htmlspecialchars($e['game_category']) ?></td>
@@ -209,7 +170,6 @@ if ($organizer === '') $organizer = 'N/A';
 <td>
     <input type="checkbox" class="row" value="<?= $e['id'] ?>">
 </td>
-
 </tr>
 
 <?php endforeach; ?>

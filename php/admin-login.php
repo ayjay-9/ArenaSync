@@ -9,26 +9,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'] ?? '';
     $userPassword = $_POST['password'] ?? '';
 
-    try {
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND role = 'admin'");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
 
-        $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND role = 'admin'");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
 
-        if ($user && password_verify($userPassword, $user['password'])) {
+    if ($user && password_verify($userPassword, $user['password'])) {
 
-            $_SESSION['admin_id'] = $user['id'];
-            $_SESSION['admin_name'] = $user['first_name'];
+        $_SESSION['admin_id'] = $user['id'];
+        $_SESSION['admin_name'] = $user['first_name'];
 
-            header("Location: admin-index.php");
-            exit();
+        header("Location: admin-index.php");
+        exit();
 
-        } else {
-            $error = "Invalid admin credentials.";
-        }
-
-    } catch (PDOException $e) {
-        $error = "Database error: " . $e->getMessage();
+    } else {
+        $error = "Invalid admin credentials.";
     }
 }
 ?>

@@ -21,25 +21,27 @@ if (isset($_POST['logout'])) {
 
 require_once $_SERVER['DOCUMENT_ROOT'] . "/ArenaSync/db_config.php";
 
+/**
+ * SAFE COUNT HELPER
+ */
+function getCount($conn, $table)
+{
+    $result = $conn->query("SELECT COUNT(*) AS total FROM $table");
+    $row = $result->fetch_assoc();
+    return $row['total'] ?? 0;
+}
+
 /* TOTAL USERS */
-$stmt = $conn->prepare("SELECT COUNT(*) FROM users");
-$stmt->execute();
-$totalUsers = $stmt->fetchColumn();
+$totalUsers = getCount($conn, "users");
 
 /* TOTAL EVENTS */
-$stmt = $conn->prepare("SELECT COUNT(*) FROM events");
-$stmt->execute();
-$totalEvents = $stmt->fetchColumn();
+$totalEvents = getCount($conn, "events");
 
 /* TOTAL GAMES */
-$stmt = $conn->prepare("SELECT COUNT(*) FROM games");
-$stmt->execute();
-$totalGames = $stmt->fetchColumn();
+$totalGames = getCount($conn, "games");
 
 /* TOTAL BOOKINGS */
-$stmt = $conn->prepare("SELECT COUNT(*) FROM bookings");
-$stmt->execute();
-$totalBookings = $stmt->fetchColumn();
+$totalBookings = getCount($conn, "bookings");
 ?>
 
 <!doctype html>
