@@ -27,7 +27,7 @@
           setcookie('remember_me', $token, time() + 60 * 60 * 24 * 30, "/", "", false, true);
         }
 
-        header("Location: organizer-dashboard.php");
+        header("Location: ../index.php");
         exit();
       }
       $error = "Incorrect password";

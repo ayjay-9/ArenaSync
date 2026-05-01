@@ -40,6 +40,10 @@
                         <li><a href="./php/organizers.php"><span>Organizers</span></a></li>
                         <li id="my-arena-link"><a href="./php/my_arena.php"><span><i>MyArena</i></span></a></li>
                     <?php endif; ?>
+                    <!-- Show dashboard link only if an organizer is logged in -->
+                    <?php if(isset($_SESSION['organizer_id'])): ?>
+                        <li><a href="./php/organizer-dashboard.php"><span>Dashboard</span></a></li>
+                    <?php endif; ?>
                     <!-- Show login link only if no user is logged in -->
                     <?php if(!isset($_SESSION['attendee_id']) && !isset($_SESSION['organizer_id']) && !isset($_SESSION['admin_id'])): ?>
                         <li><a href="./php/login.php" class="nav-login-btn"><span>Login</span></a></li>
@@ -61,6 +65,10 @@
                     <!-- Show events link if an attendee is logged in -->
                     <?php if(isset($_SESSION['attendee_id'])): ?>
                         <a href="./php/events.php" class="hero-cta">View Events</a>
+                    <?php endif; ?>
+                    <!-- Show dashboard link if an organizer is logged in -->
+                    <?php if(isset($_SESSION['organizer_id'])): ?>
+                        <a href="./php/organizer-dashboard.php" class="hero-cta">Go to Dashboard</a>
                     <?php endif; ?>
                 </div>
             </section>
