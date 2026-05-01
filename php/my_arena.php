@@ -24,6 +24,21 @@
     $user = $result->fetch_assoc();
     $stmt->close();
 
+    // Fetch favourite organizers for this attendee
+    $fav_orgs = [];
+    $fav_stmt = $conn->prepare("
+        SELECT u.id, u.company
+        FROM favourite_organizers fo
+        JOIN users u ON fo.organizer_id = u.id
+        WHERE fo.attendee_id = ?
+        ORDER BY fo.created_at DESC
+    ");
+    $fav_stmt->bind_param("i", $_SESSION['attendee_id']);
+    $fav_stmt->execute();
+    $fav_result = $fav_stmt->get_result();
+    $fav_orgs = $fav_result->fetch_all(MYSQLI_ASSOC);
+    $fav_stmt->close();
+
     // Handle POST actions
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -213,8 +228,39 @@
 
                 <!-- Favourites section -->
                 <section id="favourites">
-                    <h2 class="section-title">Favourites</h2>
+                    <h2 class="section-title">Favourite Events</h2>
                     <p>Here you can see your favourite events and organizers. (Feature coming soon!)</p>
+
+                    <h2 class="section-title">Favourite Organizers</h2>
+                    <?php if (count($fav_orgs) > 0): ?>
+                        <div class="fav-orgs-grid">
+                            <?php foreach ($fav_orgs as $org): ?>
+                                <div class="fav-org-card">
+                                    <h5><?php echo htmlspecialchars($org['company']); ?></h5>
+                                    <ul class="fav-org-events">
+                                        <?php
+                                            $ev_stmt = $conn->prepare("SELECT g.name FROM events e JOIN games g ON e.game_id = g.id WHERE e.organiser_id = ?");
+                                            $ev_stmt->bind_param("i", $org['id']);
+                                            $ev_stmt->execute();
+                                            $ev_result = $ev_stmt->get_result();
+                                            if ($ev_result->num_rows > 0) {
+                                                while ($ev = $ev_result->fetch_assoc()) {
+                                                    echo "<li>" . htmlspecialchars($ev['name']) . "</li>";
+                                                }
+                                            } else {
+                                                echo "<li>No events yet</li>";
+                                            }
+                                            $ev_stmt->close();
+                                        ?>
+                                    </ul>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <p class="fav-empty">You haven't favourited any organizers yet.
+                            <a href="./organizers.php">Browse organizers</a> to add some!
+                        </p>
+                    <?php endif; ?>
                 </section>
             </main>
         </div>

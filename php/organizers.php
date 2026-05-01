@@ -27,6 +27,17 @@
     $result = $stmt->get_result();
     $organizers = $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
     $stmt->close();
+
+    // Fetch the IDs of organizers already favourited by this attendee
+    $fav_ids = [];
+    $fav_stmt = $conn->prepare("SELECT organizer_id FROM favourite_organizers WHERE attendee_id = ?");
+    $fav_stmt->bind_param("i", $_SESSION['attendee_id']);
+    $fav_stmt->execute();
+    $fav_result = $fav_stmt->get_result();
+    while ($row = $fav_result->fetch_assoc()) {
+        $fav_ids[] = $row['organizer_id'];
+    }
+    $fav_stmt->close();
 ?>
 
 <!doctype html>
@@ -79,10 +90,25 @@
             <?php if (count($organizers) > 0): ?>
                 <div class="organizers-grid">
                     <!-- Loop through each organizer and display their company name and events -->
-                    <?php foreach ($organizers as $organizer): ?>
+                    <?php foreach ($organizers as $organizer):
+                        $isFav = in_array($organizer['id'], $fav_ids);
+                    ?>
                         <div class="organizer-card">
                             <div class="organizer-card-body">
-                                <h5><?php echo htmlspecialchars($organizer['company']); ?></h5>
+                                <div class="organizer-card-top">
+                                    <h5><?php echo htmlspecialchars($organizer['company']); ?></h5>
+                                    <button class="fav-btn<?php echo $isFav ? ' favourited' : ''; ?>"
+                                            data-organizer-id="<?php echo (int) $organizer['id']; ?>"
+                                            aria-label="<?php echo $isFav ? 'Remove from favourites' : 'Add to favourites'; ?>"
+                                            type="button">
+                                        <svg class="star-empty" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/>
+                                        </svg>
+                                        <svg class="star-filled" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                                        </svg>
+                                    </button>
+                                </div>
                                 <ul class="organizer-events">
                                     <?php
                                         // Fetch events organised by the current organizer
@@ -128,5 +154,29 @@
         </footer>
     </div>
     <script src="../js/main.js"></script>
+    <script>
+        document.querySelectorAll('.fav-btn').forEach(btn => {
+            btn.addEventListener('click', async function () {
+                const organizerId = this.dataset.organizerId;
+                try {
+                    const res = await fetch('./toggle_favourite_organizer.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'organizer_id=' + encodeURIComponent(organizerId)
+                    });
+                    const data = await res.json();
+                    if (data.favourited) {
+                        this.classList.add('favourited');
+                        this.setAttribute('aria-label', 'Remove from favourites');
+                    } else {
+                        this.classList.remove('favourited');
+                        this.setAttribute('aria-label', 'Add to favourites');
+                    }
+                } catch (err) {
+                    console.error('Failed to toggle favourite:', err);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -101,12 +101,45 @@ main {
     padding: 1.2rem 1.4rem;
 }
 
+/* ── Card top row (title + star) ───────────────── */
+.organizer-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
 .organizer-card-body h5 {
     color: var(--accent);
     font-size: 1.1rem;
-    margin: 0 0 0.75rem;
+    margin: 0;
     letter-spacing: 0.05em;
 }
+
+/* ── Favourite star button ──────────────────────── */
+.fav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.2rem;
+    line-height: 0;
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.15s;
+}
+
+.fav-btn:hover {
+    color: var(--accent);
+    transform: scale(1.2);
+}
+
+.fav-btn.favourited {
+    color: #f5c518;
+}
+
+.fav-btn .star-filled { display: none; }
+.fav-btn.favourited .star-empty { display: none; }
+.fav-btn.favourited .star-filled { display: block; }
 
 /* ── Events list inside a card ─────────────────── */
 .organizer-events {
