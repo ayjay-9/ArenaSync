@@ -129,6 +129,14 @@
                     <p class="no-events-message">No events are scheduled at the moment. Check back soon!</p>
                 <?php else: ?>
 
+                    <div class="event-search-wrapper">
+                        <div class="search-wrapper">
+                            <input type="text" id="game-search-input" placeholder="Search by game name..." autocomplete="off">
+                            <button type="button" id="game-search-clear">Clear</button>
+                        </div>
+                    </div>
+                    <p id="no-search-results" class="no-events-message" style="display:none;width:100%;">No events match your search.</p>
+
                     <?php foreach ($events as $ev):
                         $img      = getGameImage($ev['game_name'], $game_images);
                         $popupId  = 'popup-event-' . $ev['id'];
@@ -137,7 +145,7 @@
                         $date     = date('F j, Y', strtotime($ev['date_time']));
                         $time     = date('g:i A', strtotime($ev['date_time'])) . ' GMT';
                     ?>
-                    <div class="event-card" data-event-id="<?php echo $ev['id']; ?>">
+                    <div class="event-card" data-event-id="<?php echo $ev['id']; ?>" data-game-name="<?php echo htmlspecialchars(strtolower($ev['game_name'])); ?>">
                         <img src="../images/backgrounds/<?php echo htmlspecialchars($img); ?>"
                              alt="<?php echo htmlspecialchars($ev['game_name']); ?> Event">
                         <section class="event-details">

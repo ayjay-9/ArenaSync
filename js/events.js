@@ -95,6 +95,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // RSVP buttons inside popups
     setupRSVPButtons();
 
+    // Game name search filtering
+    const gameSearchInput = document.getElementById('game-search-input');
+    const gameSearchClear = document.getElementById('game-search-clear');
+    const noSearchResults = document.getElementById('no-search-results');
+
+    function filterEvents() {
+        const q = gameSearchInput.value.trim().toLowerCase();
+        let anyVisible = false;
+        document.querySelectorAll('.event-card').forEach(card => {
+            const match = !q || (card.dataset.gameName || '').includes(q);
+            card.style.display = match ? '' : 'none';
+            if (match) anyVisible = true;
+        });
+        if (noSearchResults) noSearchResults.style.display = (!anyVisible && q) ? '' : 'none';
+    }
+
+    if (gameSearchInput) {
+        gameSearchInput.addEventListener('input', filterEvents);
+        gameSearchClear.addEventListener('click', () => {
+            gameSearchInput.value = '';
+            filterEvents();
+        });
+    }
+
     // Favourite event star buttons
     document.querySelectorAll('.fav-btn[data-event-id]').forEach(btn => {
         btn.addEventListener('click', async function () {
