@@ -237,10 +237,62 @@ body {
     color: #fff;
 }
 
+/* ── Shared card sub-sections ──────────────────── */
+.arena-card-header {
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.arena-card-header h5 {
+    color: var(--accent);
+    font-size: 0.95rem;
+    margin: 0;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.arena-card-body {
+    padding: 0.85rem 1.1rem;
+    flex: 1;
+}
+
+.arena-card-footer {
+    padding: 0.6rem 1.1rem;
+    border-top: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* ── Calendar icon ─────────────────────────────── */
+.cal-icon {
+    width: 14px;
+    height: 14px;
+    fill: var(--accent);
+    vertical-align: middle;
+    margin-right: 4px;
+    flex-shrink: 0;
+}
+
+/* ── Star icon (filled) ────────────────────────── */
+.star-icon-filled {
+    width: 15px;
+    height: 15px;
+    fill: #f5c518;
+    flex-shrink: 0;
+}
+
 /* ── Booked events grid ────────────────────────── */
 .booked-events-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     gap: 1rem;
     margin-bottom: 2rem;
 }
@@ -249,25 +301,37 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 1rem 1.2rem;
-    transition: border-color 0.2s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .booked-event-card:hover {
     border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(0, 195, 255, 0.1);
 }
 
-.booked-event-card h5 {
-    color: var(--accent);
-    font-size: 1rem;
-    margin: 0 0 0.3rem;
-    letter-spacing: 0.05em;
+/* ── Favourite event card ──────────────────────── */
+.fav-event-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.fav-event-card:hover {
+    border-color: #f5c518;
+    box-shadow: 0 4px 16px rgba(245, 197, 24, 0.1);
 }
 
 .booked-event-company {
     font-size: 0.82rem;
     color: var(--accent);
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.5rem;
     font-weight: normal;
     letter-spacing: 0.03em;
     opacity: 0.75;
@@ -277,7 +341,11 @@ body {
     font-size: 0.82rem;
     color: var(--text-muted);
     font-weight: normal;
-    margin: 0 0 0.6rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
 }
 
 .registered-badge {
@@ -302,19 +370,15 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 1rem 1.2rem;
-    transition: border-color 0.2s;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .fav-org-card:hover {
     border-color: var(--accent);
-}
-
-.fav-org-card h5 {
-    color: var(--accent);
-    font-size: 1rem;
-    margin: 0 0 0.6rem;
-    letter-spacing: 0.05em;
+    box-shadow: 0 4px 16px rgba(0, 195, 255, 0.1);
 }
 
 .fav-org-events {

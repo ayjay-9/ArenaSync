@@ -68,12 +68,15 @@
     exit();
   }
 
-  // Fetch this organizer's events
+  // Fetch this organizer's events with booking counts
   $stmt = $conn->prepare("
-    SELECT e.id, e.date_time, e.game_id, g.name AS game_name
+    SELECT e.id, e.date_time, e.game_id, g.name AS game_name,
+           COUNT(b.user_id) AS booking_count
     FROM events e
     JOIN games g ON e.game_id = g.id
+    LEFT JOIN bookings b ON b.event_id = e.id
     WHERE e.organiser_id = ?
+    GROUP BY e.id, e.date_time, e.game_id, g.name
     ORDER BY e.date_time
   ");
   $stmt->bind_param("i", $organizer_id);
@@ -103,6 +106,11 @@
     </a>
     <p>ArenaSync</p>
     <nav class="navbar">
+      <div class="hamburger" id="hamburger">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
       <ul class="nav-links" id="nav-links">
         <li><a href="../index.php"><span>Home</span></a></li>
         <li><a href="./organizer-dashboard.php"><span>Dashboard</span></a></li>
@@ -154,11 +162,12 @@
               <th></th>
               <th>Date &amp; Time</th>
               <th>Game</th>
+              <th>Bookings</th>
             </tr>
           </thead>
           <tbody>
             <?php if (count($events) === 0): ?>
-              <tr><td colspan="3">No events yet.</td></tr>
+              <tr><td colspan="4">No events yet.</td></tr>
             <?php else: ?>
               <?php foreach ($events as $event): ?>
                 <tr data-id="<?php echo (int) $event['id']; ?>">
@@ -168,6 +177,9 @@
                   </td>
                   <td class="cell-game" data-value="<?php echo (int) $event['game_id']; ?>">
                     <?php echo htmlspecialchars($event['game_name']); ?>
+                  </td>
+                  <td class="cell-bookings">
+                    <span class="booking-count-badge"><?php echo (int) $event['booking_count']; ?></span>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -201,9 +213,9 @@
   </div>
 
   <script>
-    // Game options for the inline editor
     const GAMES = <?php echo json_encode($games); ?>;
   </script>
+  <script src="../js/main.js"></script>
   <script src="../js/organizer-dashboard.js"></script>
 </body>
 </html>

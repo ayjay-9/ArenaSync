@@ -67,6 +67,9 @@
     $fav_orgs = $fav_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     $fav_stmt->close();
 
+    $cal_svg   = '<svg class="cal-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/><path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>';
+    $star_icon = '<svg class="star-icon-filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>';
+
     // Handle POST actions
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -236,14 +239,21 @@
                         <div class="booked-events-grid">
                             <?php foreach ($booked_events as $ev): ?>
                                 <div class="booked-event-card">
-                                    <h5><?php echo htmlspecialchars($ev['game_name']); ?></h5>
-                                    <p class="booked-event-company"><?php echo htmlspecialchars($ev['company']); ?></p>
-                                    <p class="booked-event-date">
-                                        <?php echo htmlspecialchars(date('F j, Y', strtotime($ev['date_time']))); ?>
-                                        &mdash;
-                                        <?php echo htmlspecialchars(date('g:i A', strtotime($ev['date_time']))); ?> GMT
-                                    </p>
-                                    <span class="registered-badge">&#10003; Registered</span>
+                                    <div class="arena-card-header">
+                                        <h5><?php echo htmlspecialchars($ev['game_name']); ?></h5>
+                                    </div>
+                                    <div class="arena-card-body">
+                                        <p class="booked-event-company"><?php echo htmlspecialchars($ev['company']); ?></p>
+                                        <p class="booked-event-date">
+                                            <?php echo $cal_svg; ?>
+                                            <?php echo htmlspecialchars(date('F j, Y', strtotime($ev['date_time']))); ?>
+                                            &mdash;
+                                            <?php echo htmlspecialchars(date('g:i A', strtotime($ev['date_time']))); ?> GMT
+                                        </p>
+                                    </div>
+                                    <div class="arena-card-footer">
+                                        <span class="registered-badge">&#10003; Registered</span>
+                                    </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -258,17 +268,22 @@
                             <a href="./events.php">Browse events</a> and star the ones you love!
                         </p>
                     <?php else: ?>
-                        <div class="fav-orgs-grid">
+                        <div class="booked-events-grid">
                             <?php foreach ($fav_events as $ev): ?>
-                                <div class="fav-org-card">
-                                    <h5><?php echo htmlspecialchars($ev['game_name']); ?></h5>
-                                    <p class="booked-event-company"><?php echo htmlspecialchars($ev['company']); ?></p>
-                                    <ul class="fav-org-events">
-                                        <li><?php echo htmlspecialchars(date('F j, Y', strtotime($ev['date_time']))); ?>
+                                <div class="fav-event-card">
+                                    <div class="arena-card-header">
+                                        <h5><?php echo htmlspecialchars($ev['game_name']); ?></h5>
+                                        <?php echo $star_icon; ?>
+                                    </div>
+                                    <div class="arena-card-body">
+                                        <p class="booked-event-company"><?php echo htmlspecialchars($ev['company']); ?></p>
+                                        <p class="booked-event-date">
+                                            <?php echo $cal_svg; ?>
+                                            <?php echo htmlspecialchars(date('F j, Y', strtotime($ev['date_time']))); ?>
                                             &mdash;
                                             <?php echo htmlspecialchars(date('g:i A', strtotime($ev['date_time']))); ?> GMT
-                                        </li>
-                                    </ul>
+                                        </p>
+                                    </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -279,23 +294,27 @@
                         <div class="fav-orgs-grid">
                             <?php foreach ($fav_orgs as $org): ?>
                                 <div class="fav-org-card">
-                                    <h5><?php echo htmlspecialchars($org['company']); ?></h5>
-                                    <ul class="fav-org-events">
-                                        <?php
-                                            $ev_stmt = $conn->prepare("SELECT g.name FROM events e JOIN games g ON e.game_id = g.id WHERE e.organiser_id = ?");
-                                            $ev_stmt->bind_param("i", $org['id']);
-                                            $ev_stmt->execute();
-                                            $ev_result = $ev_stmt->get_result();
-                                            if ($ev_result->num_rows > 0) {
-                                                while ($ev = $ev_result->fetch_assoc()) {
-                                                    echo "<li>" . htmlspecialchars($ev['name']) . "</li>";
+                                    <div class="arena-card-header">
+                                        <h5><?php echo htmlspecialchars($org['company']); ?></h5>
+                                    </div>
+                                    <div class="arena-card-body">
+                                        <ul class="fav-org-events">
+                                            <?php
+                                                $ev_stmt = $conn->prepare("SELECT g.name FROM events e JOIN games g ON e.game_id = g.id WHERE e.organiser_id = ?");
+                                                $ev_stmt->bind_param("i", $org['id']);
+                                                $ev_stmt->execute();
+                                                $ev_result = $ev_stmt->get_result();
+                                                if ($ev_result->num_rows > 0) {
+                                                    while ($ev = $ev_result->fetch_assoc()) {
+                                                        echo "<li>" . htmlspecialchars($ev['name']) . "</li>";
+                                                    }
+                                                } else {
+                                                    echo "<li>No events yet</li>";
                                                 }
-                                            } else {
-                                                echo "<li>No events yet</li>";
-                                            }
-                                            $ev_stmt->close();
-                                        ?>
-                                    </ul>
+                                                $ev_stmt->close();
+                                            ?>
+                                        </ul>
+                                    </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
