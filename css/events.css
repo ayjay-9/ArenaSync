@@ -73,13 +73,23 @@ aside  { grid-area: aside; }
     background: var(--bg);
 }
 
+.no-events-message {
+    width: 100%;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: normal;
+}
+
+/* ── Event card ───────────────────────────────── */
 .event-card {
     position: relative;
     background: var(--bg-surface);
     border: 1px solid var(--border);
     margin: 20px auto;
     width: 300px;
-    height: 350px;
+    height: 370px;
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s;
@@ -96,47 +106,67 @@ aside  { grid-area: aside; }
     position: absolute;
     top: 50%;
     color: var(--text);
-    padding: 0 40px;
+    padding: 0 20px;
+    width: calc(100% - 40px);
     text-align: center;
 }
 
+.event-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
 .event-details h2 {
-    font-size: 1.2rem;
-    margin: 0 auto;
+    font-size: 1.1rem;
+    margin: 0;
     text-transform: uppercase;
     color: var(--text);
+    text-align: left;
+    flex: 1;
+}
+
+.event-company {
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin: 0 0 4px;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    text-align: left;
 }
 
 .event-date {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
+    text-align: left;
+    margin: 4px 0 8px;
 }
 
 .event-date svg {
-    width: 20px;
+    width: 18px;
     fill: var(--accent);
+    vertical-align: middle;
 }
 
 .event-link,
 .learn-more {
     background-color: transparent;
     color: var(--accent);
-    padding: 8px 12px;
+    padding: 6px 10px;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
     border: 1px solid var(--accent);
+    font-size: 0.85rem;
     transition: background 0.25s, color 0.25s;
 }
 
-.learn-more {
-    padding: 8px 12px;
-    margin-right: 10px;
-}
-
 .learn-more svg {
-    width: 20px;
+    width: 18px;
     fill: var(--accent);
+    vertical-align: middle;
 }
 
 .event-link:hover,
@@ -151,36 +181,50 @@ aside  { grid-area: aside; }
     box-shadow: 0 0 24px rgba(0, 195, 255, 0.25);
 }
 
-.see-physical-location {
-    font-size: larger;
-    font-weight: bold;
+/* ── Favourite star button ──────────────────────── */
+.fav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 0.2rem;
+    line-height: 0;
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.15s;
+}
+
+.fav-btn:hover {
     color: var(--accent);
+    transform: scale(1.2);
 }
 
-/* ── Popups ───────────────────────────────────── */
-#learn-more-fortnite,
-#learn-more-callOfDuty,
-#learn-more-batman,
-#learn-more-eaSports,
-#learn-more-zelda,
-#learn-more-forza,
-#learn-more-nba,
-#learn-more-mortalKombat {
+.fav-btn.favourited {
+    color: #f5c518;
+}
+
+.fav-btn .star-filled { display: none; }
+.fav-btn.favourited .star-empty  { display: none; }
+.fav-btn.favourited .star-filled { display: block; }
+
+/* ── Popup ────────────────────────────────────── */
+.popup {
     display: none;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10000;
+    transition: opacity 0.3s ease-in-out;
 }
 
-#learn-more-fortnite.show,
-#learn-more-callOfDuty.show,
-#learn-more-batman.show,
-#learn-more-eaSports.show,
-#learn-more-zelda.show,
-#learn-more-forza.show,
-#learn-more-nba.show,
-#learn-more-mortalKombat.show {
+.popup.show {
     display: block;
     position: fixed;
     top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
     width: 60vw;
+    max-width: 680px;
+    max-height: 80vh;
+    overflow-y: auto;
     height: auto;
     background: var(--bg-surface);
     border: 1px solid var(--border);
@@ -189,31 +233,21 @@ aside  { grid-area: aside; }
     z-index: 9999;
     box-shadow: 0 0 40px rgba(0, 195, 255, 0.2);
     border-radius: 10px;
+    opacity: 1;
+    pointer-events: auto;
 }
 
-#learn-more-fortnite.show img,
-#learn-more-callOfDuty.show img,
-#learn-more-batman.show img,
-#learn-more-eaSports.show img,
-#learn-more-zelda.show img,
-#learn-more-forza.show img,
-#learn-more-nba.show img,
-#learn-more-mortalKombat.show img {
+.popup.show img {
     max-width: 70%;
     height: auto;
     border-radius: 10px;
+    display: block;
+    margin-bottom: 12px;
 }
 
-.popup {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-    pointer-events: none;
-    z-index: 10000;
-}
-
-.popup.show {
-    opacity: 1;
-    pointer-events: auto;
+.popup .event-company {
+    font-size: 0.9rem;
+    margin: 2px 0 8px;
 }
 
 .popup p {
@@ -221,14 +255,7 @@ aside  { grid-area: aside; }
     color: var(--text-muted);
 }
 
-.close-fortnite,
-.close-callOfDuty,
-.close-batman,
-.close-eaSports,
-.close-zelda,
-.close-forza,
-.close-nba,
-.close-mortalKombat {
+.close-popup {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -241,6 +268,17 @@ aside  { grid-area: aside; }
     border-radius: 5px;
 }
 
+.already-registered {
+    display: inline-block;
+    color: #00c864;
+    border: 1px solid #00c864;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* ── Dim overlay ──────────────────────────────── */
 #dim-overlay {
     display: none;
     position: fixed;
@@ -289,6 +327,14 @@ aside  { grid-area: aside; }
     border-radius: 50%;
     cursor: pointer;
     font-weight: bold;
+}
+
+.rsvp-company {
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin: -8px 0 14px;
+    font-weight: normal;
+    letter-spacing: 0.04em;
 }
 
 .form-group { margin-bottom: 15px; }
@@ -366,6 +412,11 @@ body.popup-active { overflow: hidden; }
         bottom: 20px;
         left: 25%;
         text-align: center;
+    }
+
+    .popup.show {
+        width: 90vw;
+        top: 5%;
     }
 }
 
