@@ -23,8 +23,9 @@ if (isset($_POST['logout'])) {
     <title>ArenaSync | Admin Home</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/home.css">
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/chatbot.css">
     <script src="https://unpkg.com/globe.gl"></script>
+    <script src="../js/chatbot.js" defer></script>
 </head>
 
 <body>
@@ -107,6 +108,61 @@ if (isset($_POST['logout'])) {
                     <p>
                         "Ensure platform stability, data consistency, and smooth event operations."
                     </p>
+                </section>
+            </div>
+
+            <div id="socials-section">
+                <h2>Follow Us</h2>
+                <div id="socials-counter-container">
+                    <div class="social-item">
+                        <img src="../icons/facebook-app-symbol.png" class="social-icon" alt="Facebook">
+                        <span class="home-counter" data-target="151000">0</span>
+                        <p class="social-label">Facebook Followers</p>
+                    </div>
+                    <div class="social-item">
+                        <img src="../icons/twitter-black-shape.png" class="social-icon" alt="Twitter">
+                        <span class="home-counter" data-target="122300">0</span>
+                        <p class="social-label">Twitter Followers</p>
+                    </div>
+                    <div class="social-item">
+                        <img src="../icons/twitch.png" class="social-icon" alt="Twitch">
+                        <span class="home-counter" data-target="89500">0</span>
+                        <p class="social-label">Twitch Followers</p>
+                    </div>
+                    <div class="social-item">
+                        <img src="../icons/youtube.png" class="social-icon" alt="YouTube">
+                        <span class="home-counter" data-target="2080000">0</span>
+                        <p class="social-label">YouTube Subscribers</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="locations">
+                <section id="globe-section">
+                    <h2>Our Locations</h2>
+                    <div id="globe-container"></div>
+                </section>
+                <section id="offices">
+                    <div id="headquarters">
+                        <h2>Headquarters</h2>
+                        <p>ArenaSync is headquartered at Griffith College, Cork, Ireland.</p>
+                        <p><strong>Address:</strong> Griffith College Cork, Wellington Road, Cork City, Co. Cork, Ireland</p>
+                        <p><strong>Contact:</strong> +353 (12) 345 6789</p>
+                    </div>
+                    <br>
+                    <div id="branch-offices">
+                        <h2>Event Hubs</h2>
+                        <ul>
+                            <li><strong>Dublin:</strong> 123 Dublin Street, Dublin, Ireland</li>
+                            <li><strong>Lagos:</strong> 456 Lagos Avenue, Lagos, Nigeria</li>
+                            <li><strong>Tokyo:</strong> 789 Tokyo Road, Tokyo, Japan</li>
+                            <li><strong>Los Angeles:</strong> 101 Hollywood Blvd, Los Angeles, USA</li>
+                            <li><strong>Seoul:</strong> 234 Seoul Street, Seoul, South Korea</li>
+                            <li><strong>São Paulo:</strong> 567 São Paulo Avenue, São Paulo, Brazil</li>
+                            <li><strong>Sydney:</strong> 890 Sydney Road, Sydney, Australia</li>
+                            <li><strong>McMurdo Station:</strong> 123 Antarctic Road, Antarctica</li>
+                        </ul>
+                    </div>
                 </section>
             </div>
 

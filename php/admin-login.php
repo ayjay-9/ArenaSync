@@ -39,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <title>ArenaSync | Admin Login</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/login.css">
-  <link rel="stylesheet" href="../css/admin.css">
 </head>
 
 <body>
