@@ -21,25 +21,27 @@ if (isset($_POST['logout'])) {
 
 require_once $_SERVER['DOCUMENT_ROOT'] . "/ArenaSync/db_config.php";
 
+/**
+ * SAFE COUNT HELPER
+ */
+function getCount($conn, $table)
+{
+    $result = $conn->query("SELECT COUNT(*) AS total FROM $table");
+    $row = $result->fetch_assoc();
+    return $row['total'] ?? 0;
+}
+
 /* TOTAL USERS */
-$stmt = $conn->prepare("SELECT COUNT(*) FROM users");
-$stmt->execute();
-$totalUsers = $stmt->fetchColumn();
+$totalUsers = getCount($conn, "users");
 
 /* TOTAL EVENTS */
-$stmt = $conn->prepare("SELECT COUNT(*) FROM events");
-$stmt->execute();
-$totalEvents = $stmt->fetchColumn();
+$totalEvents = getCount($conn, "events");
 
 /* TOTAL GAMES */
-$stmt = $conn->prepare("SELECT COUNT(*) FROM games");
-$stmt->execute();
-$totalGames = $stmt->fetchColumn();
+$totalGames = getCount($conn, "games");
 
 /* TOTAL BOOKINGS */
-$stmt = $conn->prepare("SELECT COUNT(*) FROM bookings");
-$stmt->execute();
-$totalBookings = $stmt->fetchColumn();
+$totalBookings = getCount($conn, "bookings");
 ?>
 
 <!doctype html>
@@ -60,33 +62,35 @@ $totalBookings = $stmt->fetchColumn();
 <div id="container">
 
 <header id="masthead">
-    <a href="./admin-index.php">
-        <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
-    </a>
 
-    <p>ArenaSync (Admin)</p>
+    <div class="masthead-left">
+        <a href="./admin-index.php">
+            <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
+        </a>
+
+        <p>ArenaSync (Admin)</p>
+    </div>
 
     <nav class="navbar">
 
-        <div class="hamburger" id="hamburger">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-
         <ul class="nav-links" id="nav-links">
 
-            <li>
-                <a href="./admin-index.php">
-                    <span>Home</span>
-                </a>
+            <li class="nav-item-with-theme">
+
+                <div class="theme-toggle inline-theme">
+                    <div class="theme-slider">
+                        <div class="theme-knob"></div>
+
+                        <button data-theme="light">Light</button>
+                        <button data-theme="dark">Dark</button>
+                        <button data-theme="negative">Blood</button>
+                    </div>
+                </div>
+
+                <a href="./admin-index.php"><span>Home</span></a>
             </li>
 
-            <li>
-                <a href="./admin-dashboard.php">
-                    <span>Dashboard</span>
-                </a>
-            </li>
+            <li><a href="./admin-dashboard.php"><span>Dashboard</span></a></li>
 
             <li>
                 <form method="POST" style="display:inline;">
@@ -99,6 +103,7 @@ $totalBookings = $stmt->fetchColumn();
         </ul>
 
     </nav>
+
 </header>
 
 <div id="main-content">
@@ -155,6 +160,8 @@ $totalBookings = $stmt->fetchColumn();
 </footer>
 
 </div>
+
+<script src="../js/admin-cookies.js"></script>
 
 </body>
 </html>

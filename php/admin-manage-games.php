@@ -50,13 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['logout'])) {
 /**
  * LOAD GAMES
  */
-$stmt = $conn->prepare("
+$result = $conn->query("
     SELECT id, name, category, description
     FROM games
     ORDER BY id DESC
 ");
-$stmt->execute();
-$games = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$games = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!doctype html>
@@ -77,33 +77,35 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div id="container">
 
 <header id="masthead">
-    <a href="./admin-index.php">
-        <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
-    </a>
 
-    <p>ArenaSync (Admin)</p>
+    <div class="masthead-left">
+        <a href="./admin-index.php">
+            <img src="../images/home-page-icon.png" class="home-page-icon" alt="ArenaSync Logo">
+        </a>
+
+        <p>ArenaSync (Admin)</p>
+    </div>
 
     <nav class="navbar">
 
-        <div class="hamburger" id="hamburger">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
-
         <ul class="nav-links" id="nav-links">
 
-            <li>
-                <a href="./admin-index.php">
-                    <span>Home</span>
-                </a>
+            <li class="nav-item-with-theme">
+
+                <div class="theme-toggle inline-theme">
+                    <div class="theme-slider">
+                        <div class="theme-knob"></div>
+
+                        <button data-theme="light">Light</button>
+                        <button data-theme="dark">Dark</button>
+                        <button data-theme="negative">Blood</button>
+                    </div>
+                </div>
+
+                <a href="./admin-index.php"><span>Home</span></a>
             </li>
 
-            <li>
-                <a href="./admin-dashboard.php">
-                    <span>Dashboard</span>
-                </a>
-            </li>
+            <li><a href="./admin-dashboard.php"><span>Dashboard</span></a></li>
 
             <li>
                 <form method="POST" style="display:inline;">
@@ -116,6 +118,7 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </ul>
 
     </nav>
+
 </header>
 
 <div id="main-content">
@@ -300,6 +303,8 @@ function openBatchEdit() {
 }
 
 </script>
+
+<script src="../js/admin-cookies.js"></script>
 
 </body>
 </html>

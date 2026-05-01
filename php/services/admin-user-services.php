@@ -2,24 +2,29 @@
 
 function createUser($conn, $data)
 {
+    $passwordHash = password_hash($data['password'], PASSWORD_BCRYPT);
+
     $stmt = $conn->prepare("
         INSERT INTO users (role, first_name, last_name, company, email, password)
         VALUES (?, ?, ?, ?, ?, ?)
     ");
 
-    $stmt->execute([
+    $stmt->bind_param(
+        "ssssss",
         $data['role'],
-        $data['first_name'] ?: null,
-        $data['last_name'] ?: null,
-        $data['company'] ?: null,
+        $data['first_name'],
+        $data['last_name'],
+        $data['company'],
         $data['email'],
-        password_hash($data['password'], PASSWORD_BCRYPT)
-    ]);
+        $passwordHash
+    );
+
+    $stmt->execute();
 }
 
-/**
- * SINGLE UPDATE (fallback)
- */
+/* ─────────────────────────────
+  SINGLE UPDATE
+───────────────────────────── */
 function updateUser($conn, $id, $data)
 {
     $stmt = $conn->prepare("
@@ -28,27 +33,33 @@ function updateUser($conn, $id, $data)
         WHERE id=?
     ");
 
-    $stmt->execute([
+    $stmt->bind_param(
+        "sssssi",
         $data['role'],
-        $data['first_name'] ?: null,
-        $data['last_name'] ?: null,
-        $data['company'] ?: null,
+        $data['first_name'],
+        $data['last_name'],
+        $data['company'],
         $data['email'],
         $id
-    ]);
+    );
+
+    $stmt->execute();
 }
 
-/**
- * BATCH UPDATE (NEW)
- */
+/* ─────────────────────────────
+  UPDATE 
+───────────────────────────── */
 function updateUsersBatch($conn, $data)
 {
-    $ids = $data['ids'] ?? [];
-    $roles = $data['role'] ?? [];
-    $companies = $data['company'] ?? [];
-    $emails = $data['email'] ?? [];
+    if (empty($data['ids']) || !is_array($data['ids'])) return;
 
-    foreach ($ids as $i => $id) {
+    foreach ($data['ids'] as $index => $id) {
+
+        $role = $data['role'][$index] ?? null;
+        $company = $data['company'][$index] ?? null;
+        $email = $data['email'][$index] ?? null;
+
+        if (!$role || !$email) continue;
 
         $stmt = $conn->prepare("
             UPDATE users
@@ -56,30 +67,34 @@ function updateUsersBatch($conn, $data)
             WHERE id=?
         ");
 
-        $stmt->execute([
-            $roles[$i] ?? 'attendee',
-            $companies[$i] ?: null,
-            $emails[$i],
+        $stmt->bind_param(
+            "sssi",
+            $role,
+            $company,
+            $email,
             $id
-        ]);
+        );
+
+        $stmt->execute();
     }
 }
 
-/**
- * DELETE
- */
+/* ─────────────────────────────
+   DELETE
+───────────────────────────── */
 function deleteUsers($conn, $ids)
 {
-    if (is_string($ids)) {
-        $ids = json_decode($ids, true);
-    }
-
     if (!is_array($ids) || empty($ids)) return;
 
+    $ids = array_map('intval', $ids);
+
     $placeholders = implode(',', array_fill(0, count($ids), '?'));
+    $types = str_repeat('i', count($ids));
 
     $stmt = $conn->prepare("DELETE FROM users WHERE id IN ($placeholders)");
-    $stmt->execute($ids);
+    $stmt->bind_param($types, ...$ids);
+
+    $stmt->execute();
 }
 
 function saveUsers($conn)
