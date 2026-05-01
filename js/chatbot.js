@@ -1,4 +1,5 @@
 (function () {
+  const chatbotUrl = new URL('../php/chatbot.php', document.currentScript.src).href;
   const html = `
     <button id="chatbot-bubble" aria-label="Open chatbot">?</button>
     <div id="chatbot-panel" role="dialog" aria-label="ArenaSync assistant">
@@ -44,7 +45,7 @@
     sendBtn.disabled = true;
 
     try {
-      const response = await fetch('/php/chatbot.php', {
+      const response = await fetch(chatbotUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message })
