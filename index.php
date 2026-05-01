@@ -1,6 +1,8 @@
 <?php
     // Start the session to manage user state across pages
     session_start();
+    require_once __DIR__ . '/db_config.php';
+    require_once __DIR__ . '/php/remember-me.php';
 ?>
 
 <!doctype html>
@@ -12,7 +14,9 @@
     <title>ArenaSync | Home</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/chatbot.css">
     <script src="https://unpkg.com/globe.gl"></script>
+    <script src="js/chatbot.js" defer></script>
 </head>
 
 <body>

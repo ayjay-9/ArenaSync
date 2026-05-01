@@ -1,3 +1,29 @@
+<?php
+  require_once '../db_config.php';
+
+  $error = "";
+
+  if ($_SERVER['REQUEST_METHOD'] === "POST") {
+    $company  = trim($_POST['company']);
+    $email    = trim($_POST['email']);
+    $password = $_POST['password'];
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $error = "Invalid email";
+    } elseif (strlen($password) < 8) {
+      $error = "Password must be at least 8 characters";
+    } else {
+      $hash = password_hash($password, PASSWORD_DEFAULT);
+      $stmt = $conn->prepare("INSERT INTO users (role, company, email, password) VALUES ('organiser', ?, ?, ?)");
+      $stmt->bind_param("sss", $company, $email, $hash);
+      if ($stmt->execute()) {
+        header("Location: organizer-login.php");
+        exit();
+      }
+      $error = $conn->errno === 1062 ? "Email already registered" : "Signup failed";
+    }
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,9 +66,11 @@
         <a href="./organizer-signup.php">Organizer</a>
       </div>
 
-      <form id="loginForm">
-        <!-- Hidden input to store the organizer role for signup -->
-        <input type ="hidden" id="userRole" name="userRole" value="organizer">
+      <form id="loginForm" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" novalidate>
+        <input type="hidden" id="userRole" name="userRole" value="organizer">
+        <?php if (!empty($error)): ?>
+          <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
+        <?php endif; ?>
 
         <!--Company Name -->
         <div class="input-group">

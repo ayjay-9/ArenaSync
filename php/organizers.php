@@ -3,6 +3,7 @@
     session_start();
     // Include the database connection and organizer-related functions
     require_once '../db_config.php';
+    require_once 'remember-me.php';
 
     // Check if the user is logged in as an attendee; if not, redirect to the login page
     if (!isset($_SESSION['attendee_id'])) {
@@ -36,6 +37,8 @@
     <title>ArenaSync | Organizers</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/organizers.css">
+    <link rel="stylesheet" href="../css/chatbot.css">
+    <script src="../js/chatbot.js" defer></script>
 </head>
 
 <body>

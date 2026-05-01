@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once '../db_config.php';
+    require_once 'remember-me.php';
 
     // Redirect to home if not logged in as an attendee
     if (!isset($_SESSION['attendee_id'])) {
@@ -28,6 +29,14 @@
 
         // Logout
         if (isset($_POST['action']) && $_POST['action'] === 'logout') {
+            // Clear the remember-me cookie and DB token
+            if (isset($_COOKIE['remember_me'])) {
+                $clr = $conn->prepare("UPDATE users SET remember_token = NULL WHERE remember_token = ?");
+                $clr->bind_param("s", $_COOKIE['remember_me']);
+                $clr->execute();
+                $clr->close();
+                setcookie('remember_me', '', time() - 3600, "/");
+            }
             session_unset();
             session_destroy();
             header("Location: ../index.php");
@@ -98,6 +107,8 @@
     <title>ArenaSync | My Arena</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/my_arena.css">
+    <link rel="stylesheet" href="../css/chatbot.css">
+    <script src="../js/chatbot.js" defer></script>
 </head>
 
 <body>
