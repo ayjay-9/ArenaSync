@@ -1,6 +1,7 @@
 <?php
   session_start();
   require_once '../db_config.php';
+  require_once 'services/email_service.php';
 
   $error = "";
 
@@ -8,7 +9,7 @@
     $email    = trim($_POST['email']);
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ? AND role = 'organiser'");
+    $stmt = $conn->prepare("SELECT id, password, company, email FROM users WHERE email = ? AND role = 'organiser'");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -17,6 +18,7 @@
       $user = $result->fetch_assoc();
       if (password_verify($password, $user['password'])) {
         $_SESSION['organizer_id'] = $user['id'];
+        send_login_notification($user['email'], $user['company']);
 
         if (isset($_POST['rememberMe'])) {
           $token = bin2hex(random_bytes(32));

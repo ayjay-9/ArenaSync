@@ -1,6 +1,7 @@
 <?php
     // Access the database
     require_once '../db_config.php';
+    require_once 'services/email_service.php';
 
     // Set error message variables for the signup form
     $email_error     = "";
@@ -46,6 +47,7 @@
 
         if ($stmt->execute()) {
           $success_message = "Account created successfully! Redirecting to login...";
+          send_welcome_email($email, $firstName, 'attendee');
         } else {
           // Error code 1062 = duplicate entry (email already registered)
           if ($conn->errno === 1062) {

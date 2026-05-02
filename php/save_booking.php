@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once '../db_config.php';
+    require_once 'services/email_service.php';
 
     header('Content-Type: application/json');
 
@@ -32,6 +33,30 @@
     $ins->bind_param("ii", $attendee_id, $event_id);
     if ($ins->execute()) {
         $ins->close();
+
+        $notif = $conn->prepare("
+            SELECT u.email, u.first_name, g.name AS game_name, e.date_time, org.company
+            FROM users u
+            JOIN events e ON e.id = ?
+            JOIN games g ON g.id = e.game_id
+            JOIN users org ON org.id = e.organiser_id
+            WHERE u.id = ?
+        ");
+        $notif->bind_param("ii", $event_id, $attendee_id);
+        $notif->execute();
+        $notif_data = $notif->get_result()->fetch_assoc();
+        $notif->close();
+
+        if ($notif_data) {
+            send_booking_confirmation(
+                $notif_data['email'],
+                $notif_data['first_name'],
+                $notif_data['game_name'],
+                $notif_data['date_time'],
+                $notif_data['company']
+            );
+        }
+
         echo json_encode(['success' => true]);
     } else {
         $ins->close();

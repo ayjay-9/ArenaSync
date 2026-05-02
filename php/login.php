@@ -14,6 +14,7 @@
   <?php
     // Access the database
     require_once '../db_config.php';
+    require_once 'services/email_service.php';
 
     // Set error message variables for the login form
     $email_error = "";
@@ -44,7 +45,7 @@
       // If there are no validation errors, proceed with authentication
       if (empty($email_error) && empty($password_error)) {
         // Prepare a SQL statement to prevent SQL injection
-        $stmt = $conn->prepare("SELECT id, email, password FROM users WHERE email = ?");
+        $stmt = $conn->prepare("SELECT id, email, password, first_name FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -57,6 +58,7 @@
             session_start();
             $_SESSION['attendee_id'] = $user['id'];
             $_SESSION['email'] = $user['email'];
+            send_login_notification($user['email'], $user['first_name']);
 
             // If "Remember Me" is checked, store a 30-day cookie tied to a DB token
             if (isset($_POST['rememberMe'])) {

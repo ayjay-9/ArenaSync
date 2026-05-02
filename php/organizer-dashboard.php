@@ -2,6 +2,7 @@
   session_start();
   require_once '../db_config.php';
   require_once 'remember-me.php';
+  require_once 'services/email_service.php';
 
   if (!isset($_SESSION['organizer_id'])) {
     header("Location: organizer-login.php");
@@ -37,8 +38,33 @@
       } else {
         $stmt = $conn->prepare("INSERT INTO events (date_time, game_id, organiser_id) VALUES (?, ?, ?)");
         $stmt->bind_param("sii", $date_time, $game_id, $organizer_id);
-        $stmt->execute();
-        $stmt->close();
+        if ($stmt->execute()) {
+          $new_event_id = $conn->insert_id;
+          $stmt->close();
+
+          $notif = $conn->prepare("
+            SELECT u.email, u.company, g.name AS game_name, e.date_time
+            FROM events e
+            JOIN games g ON g.id = e.game_id
+            JOIN users u ON u.id = e.organiser_id
+            WHERE e.id = ?
+          ");
+          $notif->bind_param("i", $new_event_id);
+          $notif->execute();
+          $notif_data = $notif->get_result()->fetch_assoc();
+          $notif->close();
+
+          if ($notif_data) {
+            send_event_created_email(
+              $notif_data['email'],
+              $notif_data['company'],
+              $notif_data['game_name'],
+              $notif_data['date_time']
+            );
+          }
+        } else {
+          $stmt->close();
+        }
       }
     }
 

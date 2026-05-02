@@ -1,5 +1,6 @@
 <?php
   require_once '../db_config.php';
+  require_once 'services/email_service.php';
 
   $error = "";
 
@@ -17,6 +18,7 @@
       $stmt = $conn->prepare("INSERT INTO users (role, company, email, password) VALUES ('organiser', ?, ?, ?)");
       $stmt->bind_param("sss", $company, $email, $hash);
       if ($stmt->execute()) {
+        send_welcome_email($email, $company, 'organiser');
         header("Location: organizer-login.php");
         exit();
       }
