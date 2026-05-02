@@ -1,0 +1,56 @@
+erDiagram
+    users {
+        int id PK
+        enum role
+        varchar first_name "NULL"
+        varchar last_name "NULL"
+        varchar company "NULL"
+        varchar email UK
+        varchar password
+        timestamp created_at
+        timestamp last_visited "NULL"
+        varchar remember_token "NULL"
+    }
+
+    games {
+        int id PK
+        varchar name
+        varchar category
+        text description
+    }
+
+    events {
+        int id PK
+        datetime date_time
+        int game_id FK
+        int organiser_id FK
+    }
+
+    bookings {
+        int user_id PK,FK
+        int event_id PK,FK
+        datetime booked_at
+    }
+
+    favourite_events {
+        int id PK
+        int attendee_id FK
+        int event_id FK
+        timestamp created_at
+    }
+
+    favourite_organizers {
+        int id PK
+        int attendee_id FK
+        int organizer_id FK
+        timestamp created_at
+    }
+
+    users ||--o{ events : "organises"
+    games ||--o{ events : "featured in"
+    users ||--o{ bookings : "makes"
+    events ||--o{ bookings : "has"
+    users ||--o{ favourite_events : "favourites"
+    events ||--o{ favourite_events : "favourited by"
+    users ||--o{ favourite_organizers : "follows (attendee)"
+    users ||--o{ favourite_organizers : "followed by (organiser)"
