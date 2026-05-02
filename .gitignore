@@ -48,11 +48,6 @@ bld/
 # Visual Studio 2017 auto generated files
 Generated\ Files/
 
-# MySQL-specific ignores
-# Database dump files
-*.sql
-dumps/
-database_dumps/
 
 # MySQL logs (if stored locally)
 mysql.log
