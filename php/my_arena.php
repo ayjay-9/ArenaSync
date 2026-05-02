@@ -24,7 +24,7 @@
     // Fetch booked events
     $booked_events = [];
     $bk_stmt = $conn->prepare("
-        SELECT e.id, e.date_time, g.name AS game_name, u.company
+        SELECT e.id, e.date_time, g.name AS game_name, u.company, b.booked_at
         FROM bookings b
         JOIN events e ON b.event_id = e.id
         JOIN games g  ON e.game_id  = g.id
@@ -253,6 +253,9 @@
                                     </div>
                                     <div class="arena-card-footer">
                                         <span class="registered-badge">&#10003; Registered</span>
+                                        <?php if (!empty($ev['booked_at'])): ?>
+                                        <span class="booked-on">Booked <?php echo date('M j, Y', strtotime($ev['booked_at'])); ?></span>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             <?php endforeach; ?>

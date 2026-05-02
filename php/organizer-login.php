@@ -20,6 +20,11 @@
         $_SESSION['organizer_id'] = $user['id'];
         send_login_notification($user['email'], $user['company']);
 
+        $lv = $conn->prepare("UPDATE users SET last_visited = NOW() WHERE id = ?");
+        $lv->bind_param("i", $user['id']);
+        $lv->execute();
+        $lv->close();
+
         if (isset($_POST['rememberMe'])) {
           $token = bin2hex(random_bytes(32));
           $upd = $conn->prepare("UPDATE users SET remember_token = ? WHERE id = ?");

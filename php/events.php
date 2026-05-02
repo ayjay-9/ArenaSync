@@ -79,7 +79,7 @@
     <link rel="stylesheet" href="../css/chatbot.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
-    <script src="../js/events.js" defer></script>
+    <script src="../js/events.js?v=2" defer></script>
     <script src="../js/chatbot.js" defer></script>
 </head>
 

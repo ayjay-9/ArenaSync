@@ -24,6 +24,11 @@ if (
         } elseif ($user['role'] === 'admin') {
             $_SESSION['admin_id'] = $user['id'];
         }
+
+        $upd = $conn->prepare("UPDATE users SET last_visited = NOW() WHERE id = ?");
+        $upd->bind_param("i", $user['id']);
+        $upd->execute();
+        $upd->close();
     }
     $stmt->close();
 }

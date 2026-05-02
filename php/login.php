@@ -60,6 +60,11 @@
             $_SESSION['email'] = $user['email'];
             send_login_notification($user['email'], $user['first_name']);
 
+            $lv = $conn->prepare("UPDATE users SET last_visited = NOW() WHERE id = ?");
+            $lv->bind_param("i", $user['id']);
+            $lv->execute();
+            $lv->close();
+
             // If "Remember Me" is checked, store a 30-day cookie tied to a DB token
             if (isset($_POST['rememberMe'])) {
               $token = bin2hex(random_bytes(32));

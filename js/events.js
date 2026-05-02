@@ -263,9 +263,9 @@ function showRSVPForm(eventDetails) {
 
             const pageWidth  = doc.internal.pageSize.getWidth();
             const pageHeight = doc.internal.pageSize.getHeight();
-            const qrSize     = 100;
+            const qrSize     = 70;
             const qrX        = (pageWidth - qrSize) / 2;
-            const qrY        = pageHeight - 50 - qrSize;
+            const qrY        = pageHeight - 35 - qrSize;
 
             doc.addImage(qrCode, 'PNG', qrX, qrY, qrSize, qrSize);
             doc.text('Scan for check-in', pageWidth / 2, qrY + qrSize + 6, { align: 'center' });

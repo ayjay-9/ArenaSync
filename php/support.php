@@ -232,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p class="footer-credits">Emmanuel &nbsp;&nbsp; Ahmad &nbsp;&nbsp; Miguel</p>
   </footer>
 
-  <script src="../js/support.js"></script>
+  <script src="../js/support.js?v=2"></script>
 </body>
 
 </html>
